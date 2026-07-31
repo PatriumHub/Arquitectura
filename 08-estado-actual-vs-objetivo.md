@@ -5,15 +5,17 @@
 Hoy existen los **repos vacíos** (`PatriumHub/`, `databases/`, `Arquitectura/`) y el **documento de diseño de producto** (v1).  
 El objetivo es una app PHP monolítica + una BD MySQL desplegable en Apache/phpMyAdmin, con integraciones configurables desde pantallas.
 
-| Tema | Hoy | Objetivo |
-|------|-----|----------|
-| Código app | README vacío en `PatriumHub/` | App PHP modular en `PatriumHub/` |
-| BD | Repo `databases/` vacío | `patriumhub.sql` versionado |
-| Docs arquitectura | Este set en progreso | Fuente de verdad de diseño |
-| Deploy | No definido en código | Apache DocumentRoot + phpMyAdmin |
-| Mercado Pago | Solo especificado en diseño | N cuentas desde UI, tokens en BD |
-| WooCommerce | Solo especificado en diseño | N tiendas desde UI, keys en BD |
-| `.env` para MP/WC | — | **No usar**; solo infra (`DB_*`, `APP_KEY`) |
+| Tema | Hoy (post Fase 5) | Objetivo |
+|------|-------------------|----------|
+| Código app | MVP completo (Fases 0–5) | Operación diaria + integraciones reales |
+| BD | Schema 0.5.0 + seed demo opcional | Backups periódicos |
+| Docs arquitectura | Set completo + HTTPS/backup | Mantener vivo |
+| Deploy | [Guía de deploy](guia-deploy.md) + implementación local | App en HTTPS |
+| Mercado Pago | Multi-cuenta desde UI | Probar con cuentas reales |
+| WooCommerce | Pantallas + sync stock/ventas | Probar con tienda real |
+| `.env` para MP/WC | Solo `DB_*` + `APP_URL`; tokens en menú | Mantener así |
+| Patrimonio | Modos personal / consolidado / entidad | Uso diario sin dobles |
+| UX / privacidad | Skeleton, chips, ocultar cifras, CSV | Feedback de uso real |
 
 ## Diagrama gap
 
@@ -41,13 +43,15 @@ flowchart LR
   Arch -.->|tras validar plan| DB
 ```
 
-## Prioridad técnica sugerida (sin ejecutar aún)
+## Prioridad técnica
 
-1. Congelar docs de `Arquitectura/` ✅ (este set)
-2. Crear schema `databases/patriumhub.sql`
-3. Bootstrap PHP Apache (`public/`, auth, layout, config)
-4. MVP patrimonio manual (entidades → elementos → dashboards)
-5. Pantallas de integraciones + cifrado
-6. Sync WooCommerce
-7. Sync multi Mercado Pago
-8. Participaciones / anti-duplicación avanzada / historial
+1. Congelar docs de `Arquitectura/` ✅
+2. Schema `databases/patriumhub.sql` ✅
+3. Bootstrap PHP Apache ✅
+4. MVP patrimonio manual (Fase 1) ✅
+5. Pantallas de integraciones + cifrado ✅
+6. Sync WooCommerce ✅
+7. Sync multi Mercado Pago ✅
+8. Participaciones / anti-duplicación / historial ✅
+9. Pulido UX / seguridad / operación ✅
+10. Uso real + integraciones productivas ← siguiente

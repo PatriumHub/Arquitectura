@@ -97,7 +97,7 @@ sequenceDiagram
   U->>UI: Nueva cuenta MP
   U->>UI: Nombre, entidad, Access Token, etc.
   UI->>App: Guardar conexión
-  App->>App: Cifra token con APP_KEY
+  App->>App: Cifra token con storage/app.key
   App->>DB: INSERT integrations + credentials cifradas
   U->>UI: Probar conexión / Sync ahora
   App->>DB: Lee y descifra token
@@ -121,7 +121,7 @@ sequenceDiagram
   U->>UI: Nueva tienda
   U->>UI: URL, Consumer Key, Consumer Secret, entidad
   UI->>App: Guardar conexión
-  App->>App: Cifra keys con APP_KEY
+  App->>App: Cifra keys con storage/app.key
   App->>DB: INSERT integrations
   U->>UI: Sync productos / stock / pedidos
   App->>WC: REST read-only

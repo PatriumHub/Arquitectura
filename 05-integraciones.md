@@ -4,9 +4,11 @@
 
 Las credenciales de **Mercado Pago** y **WooCommerce** **no van en `.env`**.
 
-Cada cuenta / tienda se carga desde pantallas del sistema, se asocia a una **entidad**, y se guarda **cifrada en la BD**.
+Cada cuenta / tienda se carga desde el menú **Integraciones**, se asocia a una **entidad**, y se guarda **cifrada en la BD**.
 
-El único secreto de infra local es `APP_KEY` (para cifrar/descifrar) + conexión MySQL.
+- `.env` → solo MySQL + URL de la app  
+- Clave de cifrado → se genera en **Configuración** (`storage/app.key`)  
+- Tokens WC/MP → solo pantallas de Integraciones
 
 ```mermaid
 flowchart LR
@@ -16,7 +18,7 @@ flowchart LR
   end
 
   subgraph app [PatriumHub]
-    Crypto[Cifrado APP_KEY]
+    Crypto[Cifrado storage/app.key]
     Sync[Sync services]
   end
 
@@ -171,7 +173,7 @@ sequenceDiagram
 | API caída | reintento en próximo cron; log en `sync_runs` |
 | Sync manual | misma pipeline que cron |
 | Conexión revocada | excluida del cron |
-| Sin APP_KEY | app no arranca sync (fail-fast) |
+| Sin storage/app.key | sync falla; hay que generar clave en Configuración |
 
 ---
 
@@ -188,8 +190,15 @@ Mismo patrón: **pantalla de conexión + credentials cifradas + sync_runs**.
 | Clave | Uso |
 |-------|-----|
 | `DB_HOST` / `DB_USER` / `DB_PASS` / `DB_NAME` | Conexión MySQL |
-| `APP_KEY` | Cifrado de credentials en BD |
-| `APP_URL` | Links absolutos / webhooks futuros |
+| `APP_URL` | Links absolutos |
 | `SESSION_*` | Cookies / seguridad sesión |
+| `storage/app.key` | Clave de cifrado (generada en Configuración) |
 
-**Nunca:** `MP_ACCESS_TOKEN`, `WC_CONSUMER_KEY`, etc. por cuenta única global.
+**Nunca en `.env`:** Access Token MP, Public Key MP, Consumer Key/Secret WC.
+
+---
+
+## Ver también
+
+- Cron y operación en servidor: [11 — Guía de deploy](guia-deploy.md)  
+- Índice: [README](README.md)

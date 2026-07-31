@@ -21,7 +21,7 @@ flowchart TB
 | Regla | Detalle |
 |-------|---------|
 | Almacenamiento | Solo en BD, columna cifrada |
-| Algoritmo | AES-256-GCM (o equivalente) con `APP_KEY` |
+| Algoritmo | AES-256-GCM con clave de `storage/app.key` (Configuración) |
 | Visualización | La UI **no** re-muestra el token completo tras guardar; solo “••••” + rotar |
 | Revocación | Independiente por conexión |
 | Alcance | Mostrar scopes / permisos conocidos |
@@ -49,10 +49,10 @@ flowchart TB
 
 | Secreto | Dónde | En git |
 |---------|-------|--------|
-| DB credentials | config local / `.env` infra | No |
-| `APP_KEY` | config local | No |
-| Tokens MP (N cuentas) | BD cifrada vía UI | No |
-| Keys WooCommerce (N tiendas) | BD cifrada vía UI | No |
+| DB credentials | `.env` infra | No |
+| Clave cifrado | `storage/app.key` (Configuración) | No |
+| Tokens MP (N cuentas) | BD cifrada vía menú Integraciones | No |
+| Keys WooCommerce (N tiendas) | BD cifrada vía menú Integraciones | No |
 | Schema SQL | `databases/patriumhub.sql` | Sí |
 | Seeds demo | sin secretos reales | Sí |
 
@@ -64,3 +64,7 @@ flowchart TB
 | Resto de UI/API | Sesión |
 | Webhooks futuros | Firma/secret por integración (si se habilitan) |
 | Cron CLI | Solo ejecución local/servidor, no HTTP público |
+
+## Deploy
+
+Checklist HTTPS, DocumentRoot, cookies Secure, backups y cron: **[11 — Guía de deploy](guia-deploy.md)**.

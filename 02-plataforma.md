@@ -96,8 +96,7 @@ PatriumHub/
 
 | Dato | Dónde | Por qué |
 |------|-------|---------|
-| Host / user / pass / nombre BD | `config/database.php` o `.env` local de infra | Solo conexión al servidor |
-| `APP_KEY` (cifrado) | config local (no en git) | Para cifrar tokens en BD |
-| Access token MP por cuenta | **Pantalla Integraciones → Mercado Pago** → BD cifrada | Multi-cuenta, por entidad |
-| Consumer key/secret WC por tienda | **Pantalla Integraciones → WooCommerce** → BD cifrada | Multi-tienda, por entidad |
-| URL tienda WC, webhook secrets | Misma pantalla de integración | Operable sin redeploy |
+| Host / user / pass / nombre BD | `.env` (solo infra) | Conexión al servidor |
+| Clave de cifrado | **Configuración** → `storage/app.key` | Cifra tokens en BD |
+| Access token MP por cuenta | **Integraciones → Mercado Pago** → BD cifrada | Multi-cuenta, por entidad |
+| Consumer key/secret WC por tienda | **Integraciones → WooCommerce** → BD cifrada | Multi-tienda, por entidad |

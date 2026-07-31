@@ -1,7 +1,10 @@
 # 09 — Guía de implementación
 
-Guía operativa para levantar PatriumHub en **Apache + MySQL/MariaDB + phpMyAdmin**.  
-Complementa el [plan de trabajo](plan-trabajo.md). Los pasos de código/SQL se ejecutan **después** de validar el plan.
+Guía operativa para levantar PatriumHub en **local / XAMPP** con Apache + MySQL/MariaDB + phpMyAdmin.
+
+- Deploy en **producción** (HTTPS, cron, backups, updates): **[11 — Guía de deploy](guia-deploy.md)**  
+- Detalle corto de BD: [`../databases/apply-phpmyadmin.md`](../databases/apply-phpmyadmin.md)  
+- Índice de docs: [README](README.md)
 
 ---
 
@@ -9,7 +12,7 @@ Complementa el [plan de trabajo](plan-trabajo.md). Los pasos de código/SQL se e
 
 | Componente | Mínimo |
 |------------|--------|
-| PHP | 8.1+ (extensiones: `pdo_mysql`, `openssl`, `mbstring`, `json`, `curl`) |
+| PHP | 8.1+ (`pdo_mysql`, `openssl`, `mbstring`, `json`, `curl`) |
 | Apache | con `mod_rewrite` |
 | MySQL / MariaDB | 8.0+ / 10.4+ |
 | phpMyAdmin | para importar `databases/patriumhub.sql` |
@@ -21,24 +24,51 @@ Complementa el [plan de trabajo](plan-trabajo.md). Los pasos de código/SQL se e
 ```
 PatriumHub/                 # monorepo local
 ├── PatriumHub/             # código (DocumentRoot → public/)
-├── databases/              # patriumhub.sql
+├── databases/              # patriumhub.sql + seeds/ + patches
 └── Arquitectura/           # docs
 ```
 
 En el servidor:
 
 ```
-/var/www/PatriumHub/        # clone o copy del código
+/var/www/PatriumHub/public   ← DocumentRoot
 ```
+
+XAMPP local típico:
+
+```
+http://localhost/PatriumHub/public/
+```
+
+(si el código vive en `htdocs/PatriumHub` o equivalente vía alias/junction).
 
 ---
 
 ## 3. Base de datos (phpMyAdmin)
 
-1. Crear base `patriumhub` con collation `utf8mb4_unicode_ci`.
-2. Crear usuario MySQL dedicado (ej. `patrium_app`) con grants solo sobre `patriumhub`.
-3. Importar `databases/patriumhub.sql`.
-4. (Opcional) Importar `databases/seeds/demo_minimo.sql`.
+1. Importar `databases/patriumhub.sql` (crea BD + tablas + seeds).
+2. Crear usuario MySQL dedicado:
+
+```sql
+CREATE USER IF NOT EXISTS 'patrium_app'@'localhost' IDENTIFIED BY 'CAMBIAR_PASSWORD';
+GRANT SELECT, INSERT, UPDATE, DELETE ON patriumhub.* TO 'patrium_app'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+3. Verificación:
+
+```sql
+USE patriumhub;
+SHOW TABLES;
+SELECT email, role FROM users;
+```
+
+Usuario seed de la app:
+
+| Campo | Valor |
+|-------|-------|
+| Email | `admin@patriumhub.local` |
+| Password | `admin123` |
 
 No pegar tokens de Mercado Pago ni keys de WooCommerce en el SQL.
 
@@ -46,19 +76,23 @@ No pegar tokens de Mercado Pago ni keys de WooCommerce en el SQL.
 
 ## 4. Config local de la app
 
-Archivo sugerido (fuera de git o con ejemplo versionado):
+```bash
+cd PatriumHub
+cp .env.example .env
+```
 
 ```
 DB_HOST=127.0.0.1
 DB_NAME=patriumhub
 DB_USER=patrium_app
 DB_PASS=********
-APP_KEY=base64:********
-APP_URL=https://patriumhub.tudominio
+APP_URL=http://localhost/PatriumHub/public
+APP_DEBUG=true
 ```
 
-- `APP_KEY` se genera una vez y **no se rota a la ligera** (cifra credentials en BD).
-- No existen variables `MP_*` ni `WC_*` globales.
+- En `.env` **solo** MySQL + URL. Sin tokens MP/WC.
+- Entrás al sistema → **Configuración** → Generar clave de cifrado (`storage/app.key`).
+- Después → **Integraciones** → + WooCommerce / + Mercado Pago.
 
 ---
 
@@ -79,45 +113,68 @@ APP_URL=https://patriumhub.tudominio
 </VirtualHost>
 ```
 
-En producción: HTTPS (Let’s Encrypt u otro).
+> **Producción:** checklist HTTPS, vhosts TLS, permisos y hardening → [guía de deploy §2 / §7 / §11](guia-deploy.md).
 
 ---
 
-## 6. Cron de sincronización
+## 6. Cron de sincronización y snapshots
+
+En local (rutas XAMPP según tu install):
 
 ```cron
-*/30 * * * * php /var/www/PatriumHub/cron/sync.php >> /var/log/patriumhub-sync.log 2>&1
+*/30 * * * * php C:/xampp/htdocs/PatriumHub/PatriumHub/cron/sync.php
+15 3 * * * php C:/xampp/htdocs/PatriumHub/PatriumHub/cron/snapshots.php
 ```
 
-El cron solo procesa integraciones `active` cuyas credenciales están en BD.
+En servidor Linux, ver [guía de deploy §9](guia-deploy.md).
+
+- `sync.php`: WooCommerce y Mercado Pago (`sync_auto=true`). Requiere `storage/app.key`.
+- `snapshots.php`: historial patrimonial (personal, consolidado, por entidad).
+
+Patches opcionales si la BD es antigua:
+
+- `databases/patch_fase4.sql` (snapshots / saved_views)
+- `databases/patch_fase5.sql` (marca schema 0.5.0)
+
+Seed demo opcional (sin tokens): `databases/seeds/demo_minimo.sql` — **no usar en producción real**.
 
 ---
 
-## 7. Smoke test (post Fase 0/1)
+## 7. Smoke test
 
-- [ ] Login funciona  
-- [ ] Crear persona y empresa  
-- [ ] Crear cuenta con saldo  
-- [ ] Dashboard muestra patrimonio  
-- [ ] (Fase 2+) Alta WooCommerce desde UI → Probar conexión → Sync  
-- [ ] (Fase 3+) Alta Mercado Pago desde UI → Probar conexión → Sync saldo  
+- [ ] Import SQL OK (`users`, `integrations`, etc.)
+- [ ] `.env` solo con `DB_*` + `APP_URL` (sin tokens)
+- [ ] Login seed + **Configuración** → generar clave
+- [ ] Integraciones → WooCommerce (keys en pantalla) → Probar / Sync
+- [ ] Integraciones → Mercado Pago (token en pantalla) → Probar / Sync
+- [ ] `php cron/sync.php` corre sin error
+- [ ] Participaciones + valuación; Dashboard modo Personal ≠ Consolidado con empresas
+- [ ] `php cron/snapshots.php` crea filas en `net_worth_snapshots`
+- [ ] Toggle **Ocultar cifras** (topbar / Configuración)
+- [ ] Export CSV en Cuentas y Movimientos
+- [ ] (Opcional) import `databases/seeds/demo_minimo.sql`
 
 ---
 
-## 8. Operación de integraciones (día a día)
+## 8. Operación de integraciones (Fases 2+)
 
 1. Ir a **Integraciones**.  
 2. Elegir proveedor.  
 3. Completar entidad + credenciales.  
 4. **Probar conexión**.  
 5. **Sincronizar ahora** o esperar cron.  
-6. Verificar dashboard de la entidad / MP.  
-7. Si falla auth: rotar token/keys en la misma pantalla (no en el servidor).  
 
 ---
 
-## 9. Backup
+## 9. Backup y restore
 
-- Dump periódico de `patriumhub` (mysqldump o export phpMyAdmin).  
-- Guardar `APP_KEY` en lugar seguro aparte del dump (sin la key no se descifran tokens).  
-- Backups fuera del DocumentRoot.
+Procedimiento completo (script, retención, rollback): **[guía de deploy §10](guia-deploy.md)**.
+
+Resumen local:
+
+```bash
+mysqldump -u root -p --single-transaction patriumhub > backup-patriumhub.sql
+# Guardar también storage/app.key aparte del dump
+```
+
+Si se pierde `app.key`, hay que **re-cargar** tokens desde Integraciones.
