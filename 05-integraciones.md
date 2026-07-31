@@ -200,5 +200,4 @@ Mismo patrón: **pantalla de conexión + credentials cifradas + sync_runs**.
 
 ## Ver también
 
-- Cron y operación en servidor: [11 — Guía de deploy](guia-deploy.md)  
-- Índice: [README](README.md)
+- Deploy Apache: [11 — Guía de deploy](guia-deploy.md)

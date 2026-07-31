@@ -121,5 +121,5 @@ flowchart LR
 
 1. Aplicar `databases/patch_fase5.sql` si hace falta (schema 0.5.0)  
 2. Opcional (solo local/demo): importar `databases/seeds/demo_minimo.sql`  
-3. Antes de producción: seguir **[guía de deploy](guia-deploy.md)** (HTTPS, cron, backups)  
+3. En servidor: **[guía de deploy](guia-deploy.md)** (Apache + phpMyAdmin)  
 4. El plan de fases del MVP está completo; siguientes mejoras = roadmap de producto

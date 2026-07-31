@@ -67,4 +67,4 @@ flowchart TB
 
 ## Deploy
 
-Checklist HTTPS, DocumentRoot, cookies Secure, backups y cron: **[11 — Guía de deploy](guia-deploy.md)**.
+Apache + phpMyAdmin: **[11 — Guía de deploy](guia-deploy.md)**.

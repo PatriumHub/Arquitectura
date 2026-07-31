@@ -16,7 +16,7 @@ Documentación de referencia del sistema **PatriumHub**: centro de comando patri
 | 08 | [Estado actual vs objetivo](08-estado-actual-vs-objetivo.md) | Gap analysis |
 | 09 | [Guía de implementación](guia-implementacion.md) | Arranque local / XAMPP + phpMyAdmin |
 | 10 | [Plan de trabajo](plan-trabajo.md) | Fases del MVP (0–5) |
-| 11 | [Guía de deploy](guia-deploy.md) | Producción: HTTPS, cron, backups, updates |
+| 11 | [Guía de deploy](guia-deploy.md) | Apache Linux + SQL en phpMyAdmin |
 
 ## Repos del monorepo local
 
@@ -33,7 +33,7 @@ PatriumHub/
 |----------|-----------|
 | Entender el producto | [01 — Visión](01-vision-general.md) |
 | Levantar en local | [09 — Implementación](guia-implementacion.md) |
-| Publicar en servidor | [11 — Deploy](guia-deploy.md) |
+| Subir a Apache Linux | [11 — Deploy](guia-deploy.md) |
 | Ver fases hechas | [10 — Plan de trabajo](plan-trabajo.md) |
 
 ## Reglas de oro

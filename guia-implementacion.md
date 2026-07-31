@@ -2,9 +2,8 @@
 
 Guía operativa para levantar PatriumHub en **local / XAMPP** con Apache + MySQL/MariaDB + phpMyAdmin.
 
-- Deploy en **producción** (HTTPS, cron, backups, updates): **[11 — Guía de deploy](guia-deploy.md)**  
-- Detalle corto de BD: [`../databases/apply-phpmyadmin.md`](../databases/apply-phpmyadmin.md)  
-- Índice de docs: [README](README.md)
+- Deploy en Apache Linux + phpMyAdmin: **[11 — Guía de deploy](guia-deploy.md)**  
+- Import corto de BD: [`../databases/apply-phpmyadmin.md`](../databases/apply-phpmyadmin.md)
 
 ---
 
@@ -113,30 +112,18 @@ APP_DEBUG=true
 </VirtualHost>
 ```
 
-> **Producción:** checklist HTTPS, vhosts TLS, permisos y hardening → [guía de deploy §2 / §7 / §11](guia-deploy.md).
+> En servidor Linux: [guía de deploy](guia-deploy.md).
 
 ---
 
-## 6. Cron de sincronización y snapshots
+## 6. Cron (opcional)
 
-En local (rutas XAMPP según tu install):
-
-```cron
-*/30 * * * * php C:/xampp/htdocs/PatriumHub/PatriumHub/cron/sync.php
-15 3 * * * php C:/xampp/htdocs/PatriumHub/PatriumHub/cron/snapshots.php
+```bash
+php cron/sync.php
+php cron/snapshots.php
 ```
 
-En servidor Linux, ver [guía de deploy §9](guia-deploy.md).
-
-- `sync.php`: WooCommerce y Mercado Pago (`sync_auto=true`). Requiere `storage/app.key`.
-- `snapshots.php`: historial patrimonial (personal, consolidado, por entidad).
-
-Patches opcionales si la BD es antigua:
-
-- `databases/patch_fase4.sql` (snapshots / saved_views)
-- `databases/patch_fase5.sql` (marca schema 0.5.0)
-
-Seed demo opcional (sin tokens): `databases/seeds/demo_minimo.sql` — **no usar en producción real**.
+`sync.php` necesita la clave de Configuración. Seed demo: `databases/seeds/demo_minimo.sql`.
 
 ---
 
@@ -166,15 +153,6 @@ Seed demo opcional (sin tokens): `databases/seeds/demo_minimo.sql` — **no usar
 
 ---
 
-## 9. Backup y restore
+## 9. Backup
 
-Procedimiento completo (script, retención, rollback): **[guía de deploy §10](guia-deploy.md)**.
-
-Resumen local:
-
-```bash
-mysqldump -u root -p --single-transaction patriumhub > backup-patriumhub.sql
-# Guardar también storage/app.key aparte del dump
-```
-
-Si se pierde `app.key`, hay que **re-cargar** tokens desde Integraciones.
+Exportar la BD desde phpMyAdmin. Si ya generaste la clave de cifrado, guardá también `storage/app.key`.
