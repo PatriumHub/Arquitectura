@@ -119,7 +119,6 @@ flowchart LR
 
 ## Próximo paso
 
-1. Aplicar `databases/patch_fase5.sql` si hace falta (schema 0.5.0)  
-2. Opcional (solo local/demo): importar `databases/seeds/demo_minimo.sql`  
-3. En servidor: **[guía de deploy](guia-deploy.md)** (Apache + phpMyAdmin)  
-4. El plan de fases del MVP está completo; siguientes mejoras = roadmap de producto
+1. Importar `databases/patriumhub.sql` en phpMyAdmin  
+2. En servidor: **[guía de deploy](guia-deploy.md)**  
+3. El plan de fases del MVP está completo; siguientes mejoras = roadmap de producto

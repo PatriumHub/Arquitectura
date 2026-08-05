@@ -51,17 +51,13 @@ flowchart TB
 
 | Componente | Ubicación |
 |------------|-----------|
-| DocumentRoot | `.../PatriumHub/public` |
-| App PHP | `.../PatriumHub/` |
-| MySQL | servidor local / hosting; import via phpMyAdmin |
-| Cron | `php /ruta/PatriumHub/cron/sync.php` cada N minutos |
+| Carpeta web | `/var/www/html/patrium` (= código de la app) |
+| Entry point | `patrium/index.php?r=/ruta` |
+| MySQL | import via phpMyAdmin |
+| Cron | `php /var/www/html/patrium/cron/sync.php` |
 
-Ejemplo vhost:
-
-```
-DocumentRoot /var/www/PatriumHub/public
-ServerName patriumhub.local
-```
+URL: `http://IP/patrium/` — ver [guía de deploy](guia-deploy.md).  
+Login seed: `admin@patriumhub.local` / `admin123`.
 
 ---
 

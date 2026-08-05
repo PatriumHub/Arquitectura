@@ -16,19 +16,16 @@ flowchart LR
 
 ## Navegación principal
 
-1. Inicio / Dashboard general  
-2. Personas  
-3. Empresas  
-4. Cuentas  
-5. Activos  
-6. Propiedades  
-7. Cuentas por cobrar  
-8. Pasivos  
-9. Inventario  
-10. Participaciones  
-11. Movimientos  
-12. Integraciones  
-13. Configuración  
+Barra corta (no un link por ABM):
+
+1. Inicio  
+2. Dashboard  
+3. Mercado Pago  
+4. **Patrimonio** (menú: Personas, Empresas, Participaciones, Cuentas, Activos, Propiedades, Cobrables, Pasivos, Inventario, Movimientos)  
+5. Integraciones  
+6. Configuración  
+
+Footer: solo el nombre del producto (sin fases ni versión de roadmap).
 
 ---
 
@@ -50,7 +47,18 @@ No hay constructor libre. La personalización vive en **filtros globales**:
 Los filtros actualizan paneles sin recarga completa, muestran chips de selección activa y permiten guardar vistas frecuentes (fase posterior).
 
 ### Dashboard general
-Patrimonio neto, activos, pasivos, liquidez, cobrables, inventarios, participaciones, evolución, distribución (entidad/moneda/clase), flujo, alertas, últimos movimientos.
+Vista **principalmente gráfica** (Anexo A / producto):
+
+| Panel | Tipo |
+|-------|------|
+| KPIs | Patrimonio neto, activos, pasivos, liquidez |
+| Composición de activos | Gráfico (cuentas, activos, propiedades, cobrables, inventario, participaciones) |
+| Distribución por entidad | Gráfico de barras / participación |
+| Evolución patrimonial | Serie temporal (snapshots: neto, activos, pasivos) |
+| Flujo del período | Ingresos vs egresos |
+| Complemento | Filtros, vistas guardadas, últimos movimientos |
+
+No es un listado denso tipo ERP: primero se entiende con gráficos; el detalle tabular es secundario.
 
 ### Dashboard por empresa
 Todo pre-filtrado: patrimonio, caja/bancos, saldos MP, activos/pasivos, cobrables, stock, ventas/pedidos WC, ingresos/egresos, evolución, alertas.

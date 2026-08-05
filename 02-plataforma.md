@@ -44,30 +44,17 @@ PatriumHub concentra en una sola app:
 ## Estructura de carpetas propuesta (código)
 
 ```
-PatriumHub/
-├── public/                 # DocumentRoot Apache
-│   ├── index.php
-│   ├── assets/
-│   └── webhooks/           # endpoints públicos (MP, etc. si aplica)
+PatriumHub/                 # se copia al server como /patrium
+├── index.php               # entry point
+├── .htaccess
+├── assets/
 ├── app/
 │   ├── Controllers/
-│   ├── Models/
 │   ├── Services/
-│   │   ├── Patrimonio/
-│   │   ├── Integrations/
-│   │   │   ├── MercadoPago/
-│   │   │   └── WooCommerce/
-│   │   └── Sync/
-│   ├── Middleware/
-│   └── Views/              # o templates PHP
+│   └── Views/
 ├── config/
-│   ├── app.php
-│   └── database.php        # host/user/pass/db (infra local)
 ├── cron/
-│   └── sync.php
 ├── storage/
-│   ├── logs/
-│   └── uploads/
 └── README.md
 ```
 

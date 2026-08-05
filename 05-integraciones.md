@@ -2,9 +2,9 @@
 
 ## Principio rector
 
-Las credenciales de **Mercado Pago** y **WooCommerce** **no van en `.env`**.
+Las credenciales de **Mercado Pago**, **WooCommerce** y **Dolibarr** **no van en `.env`**.
 
-Cada cuenta / tienda se carga desde el menú **Integraciones**, se asocia a una **entidad**, y se guarda **cifrada en la BD**.
+Cada cuenta / tienda / instancia Dolibarr se carga desde el menú **Integraciones**, se asocia a una **entidad**, y se guarda **cifrada en la BD**.
 
 - `.env` → solo MySQL + URL de la app  
 - Clave de cifrado → se genera en **Configuración** (`storage/app.key`)  
@@ -142,7 +142,43 @@ Acciones UI: mismas que MP (guardar, probar, sync, revocar).
 
 ---
 
-## 3. Sync engine
+## 3. Dolibarr — una conexión por empresa
+
+### Objetivo
+Conectar N instancias / entities Dolibarr (multi-company vía `DOLAPIENTITY`), cada una ligada a una **empresa** de PatriumHub.  
+Se importa **patrimonio operativo**, no libros contables ni asientos.
+
+### Pantalla: Integraciones → Dolibarr
+
+| Campo UI | Persistencia |
+|----------|--------------|
+| Nombre | `integrations.name` |
+| Empresa PatriumHub | `integrations.entity_id` |
+| URL Dolibarr | `config_json.base_url` |
+| API Key | `integration_credentials.api_key` cifrado |
+| Entity multi-company | `config_json.dolibarr_entity` (header `DOLAPIENTITY`) |
+| Moneda | `config_json.currency_code` |
+| Flags sync | bancos, stock, cobrables, pasivos, auto |
+
+### Datos importados → modelo PatriumHub
+
+| Dolibarr | Destino |
+|----------|---------|
+| `bankaccounts` (saldo) | `accounts` (bancos) |
+| `products` (stock × PMP/precio) | `inventories` |
+| Facturas cliente impagas | `receivables` |
+| Facturas proveedor impagas | `liabilities` (tipo supplier) |
+
+Con eso el **patrimonio neto / salud / valuación** se recalculan solos en la ficha de empresa.
+
+### Reglas
+- Solo lectura.
+- Una conexión Dolibarr = una empresa PatriumHub (repetir por cada company del multi-company).
+- No se pretende ser ERP: no se sincronizan asientos, plan de cuentas ni reportes fiscales.
+
+---
+
+## 4. Sync engine
 
 ```mermaid
 sequenceDiagram

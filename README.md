@@ -40,7 +40,7 @@ PatriumHub/
 
 1. **Una sola aplicación PHP** en `PatriumHub/` — front y back juntos, modular.
 2. **Una sola base de datos** (`patriumhub`) versionada en `databases/`.
-3. **Deploy en Apache** + MySQL/MariaDB; DocumentRoot solo `public/`.
+3. **Deploy en Apache** + MySQL/MariaDB; carpeta `/patrium` con rutas `index.php?r=/...` (sin tocar Apache).
 4. **Credenciales de integraciones en pantallas del sistema**, no en `.env`:
    - cada cuenta de Mercado Pago se configura en UI;
    - cada tienda WooCommerce se configura en UI;

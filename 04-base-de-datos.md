@@ -136,13 +136,8 @@ Campos clave de `integration_credentials`:
 ```
 databases/
 ├── README.md
-├── patriumhub.sql          # schema completo
-└── seeds/
-    └── demo_minimo.sql     # opcional, sin secretos reales
+├── apply-phpmyadmin.md
+└── patriumhub.sql          # único SQL: importar y listo
 ```
 
-Cada archivo debe ser:
-- aplicable en phpMyAdmin de una sola vez (o con instrucciones claras),
-- con `utf8mb4`,
-- sin datos secretos,
-- con índices para filtros de dashboard (`entity_id`, fechas, provider).
+`patriumhub.sql` es aplicable de una sola vez en phpMyAdmin, con `utf8mb4`, sin secretos de integraciones, e índices para dashboard.

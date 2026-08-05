@@ -12,7 +12,7 @@ Guía operativa para levantar PatriumHub en **local / XAMPP** con Apache + MySQL
 | Componente | Mínimo |
 |------------|--------|
 | PHP | 8.1+ (`pdo_mysql`, `openssl`, `mbstring`, `json`, `curl`) |
-| Apache | con `mod_rewrite` |
+| Apache | PHP + MySQL (no hace falta `mod_rewrite`) |
 | MySQL / MariaDB | 8.0+ / 10.4+ |
 | phpMyAdmin | para importar `databases/patriumhub.sql` |
 
@@ -22,24 +22,13 @@ Guía operativa para levantar PatriumHub en **local / XAMPP** con Apache + MySQL
 
 ```
 PatriumHub/                 # monorepo local
-├── PatriumHub/             # código (DocumentRoot → public/)
-├── databases/              # patriumhub.sql + seeds/ + patches
+├── PatriumHub/             # código (copiar como /patrium en el server)
+├── databases/              # patriumhub.sql
 └── Arquitectura/           # docs
 ```
 
-En el servidor:
-
-```
-/var/www/PatriumHub/public   ← DocumentRoot
-```
-
-XAMPP local típico:
-
-```
-http://localhost/PatriumHub/public/
-```
-
-(si el código vive en `htdocs/PatriumHub` o equivalente vía alias/junction).
+En el servidor la app vive en `/var/www/html/patrium` → URL `http://IP/patrium`.  
+Ver [guía de deploy](guia-deploy.md).
 
 ---
 
@@ -62,12 +51,14 @@ SHOW TABLES;
 SELECT email, role FROM users;
 ```
 
-Usuario seed de la app:
+Usuario seed de la app (cambiar después del primer login):
 
 | Campo | Valor |
 |-------|-------|
 | Email | `admin@patriumhub.local` |
 | Password | `admin123` |
+
+URL típica: `http://IP/patrium/` — las pantallas usan `index.php?r=/ruta` (sin rewrite).
 
 No pegar tokens de Mercado Pago ni keys de WooCommerce en el SQL.
 
@@ -85,34 +76,19 @@ DB_HOST=127.0.0.1
 DB_NAME=patriumhub
 DB_USER=patrium_app
 DB_PASS=********
-APP_URL=http://localhost/PatriumHub/public
+APP_URL=http://192.168.100.50/patrium
 APP_DEBUG=true
 ```
 
 - En `.env` **solo** MySQL + URL. Sin tokens MP/WC.
-- Entrás al sistema → **Configuración** → Generar clave de cifrado (`storage/app.key`).
+- Entrás a `http://IP/patrium` → **Configuración** → Generar clave de cifrado.
 - Después → **Integraciones** → + WooCommerce / + Mercado Pago.
 
 ---
 
-## 5. Apache vhost (ejemplo)
+## 5. Apache
 
-```apache
-<VirtualHost *:80>
-    ServerName patriumhub.local
-    DocumentRoot /var/www/PatriumHub/public
-
-    <Directory /var/www/PatriumHub/public>
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/patriumhub-error.log
-    CustomLog ${APACHE_LOG_DIR}/patriumhub-access.log combined
-</VirtualHost>
-```
-
-> En servidor Linux: [guía de deploy](guia-deploy.md).
+Deploy en Linux: **[guía de deploy](guia-deploy.md)** (carpeta `patrium` con `index.php` adentro).
 
 ---
 
@@ -123,7 +99,7 @@ php cron/sync.php
 php cron/snapshots.php
 ```
 
-`sync.php` necesita la clave de Configuración. Seed demo: `databases/seeds/demo_minimo.sql`.
+`sync.php` necesita la clave de Configuración.
 
 ---
 
@@ -139,9 +115,8 @@ php cron/snapshots.php
 - [ ] `php cron/snapshots.php` crea filas en `net_worth_snapshots`
 - [ ] Toggle **Ocultar cifras** (topbar / Configuración)
 - [ ] Export CSV en Cuentas y Movimientos
-- [ ] (Opcional) import `databases/seeds/demo_minimo.sql`
-
 ---
+
 
 ## 8. Operación de integraciones (Fases 2+)
 

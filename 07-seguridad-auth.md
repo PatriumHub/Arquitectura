@@ -35,7 +35,7 @@ flowchart TB
 - Rate limit básico en login.
 - Prepared statements en todo SQL.
 - Uploads validados (tipo/tamaño) en `documents`.
-- Separar DocumentRoot: solo `public/` expuesto.
+- `.htaccess` bloquea `app/`, `config/`, `storage/`, `cron/`, `.env`.
 
 ## Auditoría y privacidad
 
@@ -60,11 +60,11 @@ flowchart TB
 
 | Endpoint | Auth |
 |----------|------|
-| `/login` | Público |
-| Resto de UI/API | Sesión |
+| `index.php?r=/login` | Público |
+| Resto de UI | Sesión |
 | Webhooks futuros | Firma/secret por integración (si se habilitan) |
 | Cron CLI | Solo ejecución local/servidor, no HTTP público |
 
 ## Deploy
 
-Apache + phpMyAdmin: **[11 — Guía de deploy](guia-deploy.md)**.
+Apache + phpMyAdmin, sin tocar el server: **[11 — Guía de deploy](guia-deploy.md)**.
