@@ -53,12 +53,14 @@ Filtros globales (moneda, entidad, fechas, origen) + chips activos + **vistas gu
 
 ### Ficha empresa — pestañas
 
-`Resumen · Cuentas · Estados y proyección · Activos varios · Pasivos · Propiedades · Inventario · Cobrables · Movimientos · Integraciones · Participaciones · Valuación`
+`Resumen · Cuentas · [Clientes] · Estados y proyección · Activos varios · Pasivos · Propiedades · Inventario · Cobrables · Movimientos · Integraciones · Participaciones · Valuación`
+
+**Clientes** (solo `business_model = services`): listado sync desde proyección, KPIs activo/inactivo, ficha con contacto, contrato PDF y docs extra.
 
 **Estados y proyección:** dashboard de KPIs + tablas HTML.  
 - Servicios: clientes × mes + costos.  
 - Productos: ingresos totales por mes + costos.  
-Un libro por empresa; hojas por año. El tipo se elige al crear/editar la empresa.
+Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crear** la empresa.
 
 ### Ficha persona — pestañas
 
@@ -73,12 +75,13 @@ Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). 
 ## Flujos UX críticos
 
 ### Alta de empresa
-1. Crear empresa (se crea plan de Estados y proyección vacío; Soup IT puede seedearse desde plantilla).  
+1. Crear empresa eligiendo tipo servicios/productos (se crea plan de Estados y proyección; Soup IT puede seedearse).  
 2. Definir ownerships.  
 3. Crear cuentas o conectar integraciones.  
 4. Cargar activos / pasivos / cobrables.  
 5. Completar **Estados y proyección** si aplica.  
-6. Revisar resumen / valuación.
+6. En servicios: completar fichas en **Clientes** (contacto, contrato, docs).  
+7. Revisar resumen / valuación.
 
 ### Alta de cuenta
 Desde Cuentas (elige entidad) o desde ficha de empresa.

@@ -8,7 +8,7 @@
 |-----------|-------------|-----------|
 | `patriumhub` | `databases/patriumhub.sql` | App PatriumHub |
 
-Schema version actual: **0.8.0** (ver `settings.schema.version`).
+Schema version actual: **0.8.2** (ver `settings.schema.version`).
 
 > Deploy: importar **solo** `databases/patriumhub.sql` en phpMyAdmin.  
 > Los patches históricos quedan absorbidos; no hace falta aplicar varios `.sql`.
@@ -36,6 +36,8 @@ erDiagram
   ENTITIES ||--o{ INVENTORIES : stock
   ENTITIES ||--o{ INTEGRATIONS : conecta
   ENTITIES ||--o| COMPANY_FINANCIAL_PLANS : proyecta
+  ENTITIES ||--o{ COMPANY_CLIENTS : fichas_cliente
+  COMPANY_CLIENTS ||--o{ DOCUMENTS : adjuntos
   PEOPLE ||--o{ OWNERSHIPS : participa
   COMPANIES ||--o{ OWNERSHIPS : es_participada
   COMPANIES ||--o{ BUSINESS_VALUATIONS : valuada
@@ -58,7 +60,7 @@ erDiagram
 | `user_entity_access` | Personas/empresas visibles para usuarios no-admin |
 | `entities` | Dueño lógico: `type` = `person` \| `company` |
 | `people` | Datos específicos de persona |
-| `companies` | Datos de empresa + `business_model` (`services` \| `products`) |
+| `companies` | Datos de empresa + `business_model` (`services` \| `products`; solo al crear) |
 | `ownerships` | % participación persona → empresa |
 
 ### Wealth
@@ -81,6 +83,7 @@ erDiagram
 | `budget_templates` | Gasto fijo recurrente (mensual) |
 | `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`) |
 | `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2) |
+| `company_clients` | Fichas de cliente (empresas `services`): contacto, estado, notas; montos sync desde proyección |
 
 ### Business / inventario
 
@@ -113,7 +116,7 @@ erDiagram
 |-------|-----|
 | `net_worth_snapshots` | Snapshots personal / consolidado / entidad |
 | `saved_views` | Filtros de dashboard guardados |
-| `documents` | Adjuntos (reservado) |
+| `documents` | Adjuntos; hoy: contratos/docs de `company_clients` |
 | `audit_log` | Quién cambió qué |
 | `settings` | Preferencias de app |
 
@@ -128,15 +131,21 @@ erDiagram
 | Creación | Al alta según `companies.business_model` |
 | Seed Soup IT | Solo servicios; Excel en `storage/templates/` |
 
+## `company_clients` (pestaña Clientes)
+
+| Campo / regla | Nota |
+|---------------|------|
+| Alcance | Solo empresas con `business_model = services` |
+| Lista / montos | Fuente de verdad: filas de cliente en `workbook_json` (sync al abrir Clientes o guardar proyección) |
+| Ficha | `contact_name`, `email`, `phone`, `contract_notes`, `is_active` |
+| `value_annual` / `value_total` | Recalculados desde la proyección |
+| Archivos | Via `documents`: `company_client_contract` (PDF) y `company_client_file`; disco en `storage/uploads/client_docs/` |
+
 ## Repo `databases/`
 
 ```
 databases/
-├── README.md
-├── patriumhub.sql                 # único SQL de instalación
-├── patch_estados_proyeccion.sql   # histórico (absorbido en 0.7.0)
-├── build_install_sql.py           # regenera install limpio desde dump
-└── archives/                      # dumps phpMyAdmin con datos (no instalar)
+└── patriumhub.sql                 # único SQL de instalación
 ```
 
 ## Qué no vive en esta BD
@@ -144,3 +153,4 @@ databases/
 - Tokens en texto plano.
 - Credenciales hardcodeadas de MP/WC.
 - Segunda BD por módulo.
+- Binarios de contratos/docs (solo metadatos en `documents`).

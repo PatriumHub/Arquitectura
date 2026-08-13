@@ -8,7 +8,7 @@
 | Audiencia | Usuario dueño del patrimonio (uso personal / familiar / multiempresa) |
 | Stack | PHP 8+ (front + back), HTML/CSS/JS, MySQL/MariaDB |
 | Servidor | Apache |
-| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.7.0) |
+| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.8.2) |
 | Deploy BD | phpMyAdmin (un solo import; sin patches encadenados) |
 | Framework | PHP modular (MVC ligero). Sin Laravel obligatorio en MVP |
 | Contenedores | No requeridos. Apache + MySQL nativos |
@@ -24,6 +24,7 @@ PatriumHub concentra en una sola app:
 - Cuentas, activos, propiedades, cobrables, pasivos, inventario, participaciones.
 - Presupuestos mensuales y liquidación.
 - Estados y proyección por empresa (ingresos/costos planificados).
+- Fichas de clientes (empresas de servicios): contacto, estado, contrato PDF y docs.
 - Movimientos e historial (alta/edición con ajuste de saldos).
 - Dashboards fijos con filtros y vistas guardadas.
 - Pantallas de configuración de integraciones (MP / WooCommerce).
