@@ -8,8 +8,8 @@
 | Audiencia | Usuario dueño del patrimonio (uso personal / familiar / multiempresa) |
 | Stack | PHP 8+ (front + back), HTML/CSS/JS, MySQL/MariaDB |
 | Servidor | Apache |
-| BD | Una sola: `patriumhub` en repo `databases/` |
-| Deploy BD | phpMyAdmin (import del `.sql`) |
+| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.7.0) |
+| Deploy BD | phpMyAdmin (un solo import; sin patches encadenados) |
 | Framework | PHP modular (MVC ligero). Sin Laravel obligatorio en MVP |
 | Contenedores | No requeridos. Apache + MySQL nativos |
 
@@ -22,15 +22,18 @@ PatriumHub concentra en una sola app:
 - Autenticación y usuarios.
 - ABM de entidades (personas / empresas).
 - Cuentas, activos, propiedades, cobrables, pasivos, inventario, participaciones.
-- Movimientos e historial.
-- Dashboards fijos con filtros.
+- Presupuestos mensuales y liquidación.
+- Estados y proyección por empresa (ingresos/costos planificados).
+- Movimientos e historial (alta/edición con ajuste de saldos).
+- Dashboards fijos con filtros y vistas guardadas.
 - Pantallas de configuración de integraciones (MP / WooCommerce).
-- Jobs de sincronización (cron).
+- Jobs de sincronización y snapshots (cron).
 
 ### Lo que puede hacer
 - Calcular patrimonio por entidad, personal y consolidado.
 - Sincronizar datos de lectura desde WooCommerce y Mercado Pago.
-- Guardar historial de saldos, valuaciones y syncs.
+- Guardar historial de saldos, valuaciones, snapshots y syncs.
+- Planificar ingresos/egresos anuales por empresa sin tocar cuentas.
 - Auditar altas, bajas, ediciones y sincronizaciones.
 
 ### Lo que no debe hacer

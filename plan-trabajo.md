@@ -1,7 +1,7 @@
 # Plan de trabajo PatriumHub
 
-**Estado:** ✅ Fases 0–3 en repo · WC + MP solo desde menú Integraciones  
-**Stack fijado:** PHP (front + back) · 1 BD MySQL · Apache · phpMyAdmin  
+**Estado:** ✅ Fases 0–5 completas + post-MVP (presupuestos, estados/proyección)  
+**Stack fijado:** PHP (front + back) · 1 BD MySQL (`patriumhub.sql` 0.7.0) · Apache · phpMyAdmin  
 **Integraciones:** tokens solo en pantallas; cifrado vía Configuración (`storage/app.key`); `.env` = solo DB/URL
 
 Este plan une:
@@ -117,8 +117,20 @@ flowchart LR
 
 ---
 
+## Post-MVP ya en producto
+
+| Entrega | Estado |
+|---------|--------|
+| Presupuestos mensuales + pasivo pendiente | ✅ |
+| Estados y proyección (servicios / productos) | ✅ |
+| Usuarios + permisos por entidad en Configuración | ✅ |
+| Edición de movimientos con ajuste de saldos | ✅ |
+| Borrado de cuentas en saldo 0 | ✅ |
+| Nav móvil, ocultar cifras, CSV, snapshots entidad | ✅ |
+| SQL instalación única schema 0.8.0 | ✅ |
+
 ## Próximo paso
 
-1. Importar `databases/patriumhub.sql` en phpMyAdmin  
+1. Importar **solo** `databases/patriumhub.sql` en phpMyAdmin (ver [`../databases/README.md`](../databases/README.md))  
 2. En servidor: **[guía de deploy](guia-deploy.md)**  
-3. El plan de fases del MVP está completo; siguientes mejoras = roadmap de producto
+3. Uso diario + backups; roadmap de producto fuera del plan de fases MVP

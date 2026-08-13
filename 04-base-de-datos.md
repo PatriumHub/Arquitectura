@@ -2,22 +2,23 @@
 
 ## Decisión
 
-**Una sola base de datos** para todo PatriumHub, versionada como archivo `.sql` en el repo `databases/`:
+**Una sola base de datos** para todo PatriumHub, versionada como un único archivo de instalación:
 
 | Nombre BD | Archivo SQL | Ownership |
 |-----------|-------------|-----------|
 | `patriumhub` | `databases/patriumhub.sql` | App PatriumHub |
 
-> Los schemas viven únicamente en `databases/*.sql`.  
-> Deploy: importar en phpMyAdmin.  
-> Por ahora no hay segunda BD ni microservicios de datos.
+Schema version actual: **0.8.0** (ver `settings.schema.version`).
+
+> Deploy: importar **solo** `databases/patriumhub.sql` en phpMyAdmin.  
+> Los patches históricos quedan absorbidos; no hace falta aplicar varios `.sql`.
 
 ## Principios
 
 1. **Charset** `utf8mb4` / collation `utf8mb4_unicode_ci`.
-2. **Sin secretos en el SQL** (tokens van cifrados en runtime; seeds demo sin credenciales reales).
+2. **Sin secretos en el SQL** (tokens van cifrados en runtime; seed sin credenciales reales).
 3. **Soft-delete o estados** donde aporte trazabilidad (cuentas cerradas, deudas canceladas).
-4. **Historial temporal** separado del valor actual (`account_balances`, `inventory_snapshots`, `business_valuations`).
+4. **Historial temporal** separado del valor actual (`account_balances`, `inventory_snapshots`, `business_valuations`, `net_worth_snapshots`).
 5. **Integraciones como entidades de primer nivel** — no hardcode en config de deploy.
 
 ## Diagrama ER conceptual
@@ -34,28 +35,31 @@ erDiagram
   ENTITIES ||--o{ LIABILITIES : debe
   ENTITIES ||--o{ INVENTORIES : stock
   ENTITIES ||--o{ INTEGRATIONS : conecta
+  ENTITIES ||--o| COMPANY_FINANCIAL_PLANS : proyecta
   PEOPLE ||--o{ OWNERSHIPS : participa
   COMPANIES ||--o{ OWNERSHIPS : es_participada
   COMPANIES ||--o{ BUSINESS_VALUATIONS : valuada
   ACCOUNTS ||--o{ ACCOUNT_BALANCES : historial
   ACCOUNTS ||--o{ TRANSACTIONS : mueve
+  ENTITIES ||--o{ BUDGET_TEMPLATES : gasta
+  BUDGET_TEMPLATES ||--o{ BUDGET_ITEMS : instancia
   INVENTORIES ||--o{ INVENTORY_SNAPSHOTS : historial
   INTEGRATIONS ||--o{ SYNC_RUNS : ejecuta
-  ENTITIES ||--o{ DOCUMENTS : adjunta
+  USERS ||--o{ SAVED_VIEWS : guarda
 ```
 
-## Entidades objetivo
+## Entidades actuales
 
 ### Identity / núcleo
 
 | Tabla | Uso |
 |-------|-----|
-| `users` | Login local (admin del sistema) |
+| `users` | Login local (`admin` \| `viewer`) |
+| `user_entity_access` | Personas/empresas visibles para usuarios no-admin |
 | `entities` | Dueño lógico: `type` = `person` \| `company` |
 | `people` | Datos específicos de persona |
-| `companies` | Datos específicos de empresa |
+| `companies` | Datos de empresa + `business_model` (`services` \| `products`) |
 | `ownerships` | % participación persona → empresa |
-| `roles` / `permissions` (mínimo) | Roles simples MVP |
 
 ### Wealth
 
@@ -63,12 +67,20 @@ erDiagram
 |-------|-----|
 | `accounts` | Bancos, billeteras, efectivo, MP, brokers |
 | `account_balances` | Historial de saldos |
-| `assets` | Activos generales |
-| `properties` | Inmuebles y detalle especializado |
+| `assets` | Activos generales (pueden vincularse a cuenta) |
+| `properties` | Inmuebles |
 | `receivables` | Dinero a cobrar |
 | `liabilities` | Pasivos / obligaciones |
-| `currencies` | Catálogo ARS/USD/EUR… |
-| `tags` / `entity_tags` | Etiquetas opcionales |
+| `currencies` | Catálogo ARS/USD/EUR |
+| `tags` / `entity_tags` | Etiquetas opcionales (reservado) |
+
+### Presupuestos y proyección
+
+| Tabla | Uso |
+|-------|-----|
+| `budget_templates` | Gasto fijo recurrente (mensual) |
+| `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`) |
+| `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2) |
 
 ### Business / inventario
 
@@ -77,67 +89,58 @@ erDiagram
 | `inventories` | Resumen de stock por entidad/fuente |
 | `inventory_snapshots` | Historial valor/unidades |
 | `business_valuations` | Valuación de empresa + método |
-| `sales_metrics` (opcional) | Agregados WC por período |
+| `sales_metrics` | Agregados WC por período |
 
 ### Movimientos
 
 | Tabla | Uso |
 |-------|-----|
 | `transactions` | Ingresos, egresos, transferencias, ajustes |
-| `transaction_categories` | Categorías |
+| `transaction_categories` | Categorías (Sueldos, Honorarios, WC, etc.) |
 
-### Integraciones (crítico)
+### Integraciones
 
 | Tabla | Uso |
 |-------|-----|
 | `integrations` | Conexión: provider, entity_id, nombre, estado |
-| `integration_credentials` | Keys/tokens **cifrados**, scopes, metadata |
-| `sync_runs` | Ejecuciones, OK/error, conteos, timestamps |
+| `integration_credentials` | Keys/tokens **cifrados** |
+| `sync_runs` | Ejecuciones, OK/error, conteos |
 | `sync_cursors` | Paginación / last_id / last_date |
 
-Campos clave de `integrations`:
-
-| Campo | Ejemplo |
-|-------|---------|
-| `provider` | `mercadopago` \| `woocommerce` |
-| `entity_id` | FK a `entities` |
-| `name` | `MP HomeSpot` |
-| `status` | `active` \| `error` \| `revoked` |
-| `config_json` | URL tienda, moneda, flags de sync |
-| `last_sync_at` | Actualidad |
-| `include_in_net_worth` | Si aplica vía cuenta vinculada |
-
-Campos clave de `integration_credentials`:
-
-| Campo | Nota |
-|-------|------|
-| `integration_id` | FK |
-| `key_name` | `access_token`, `consumer_key`, `consumer_secret`… |
-| `value_encrypted` | ciphertext |
-| `updated_at` | rotación |
-
-### Soporte
+### Historial y soporte
 
 | Tabla | Uso |
 |-------|-----|
-| `documents` | Adjuntos / referencias |
+| `net_worth_snapshots` | Snapshots personal / consolidado / entidad |
+| `saved_views` | Filtros de dashboard guardados |
+| `documents` | Adjuntos (reservado) |
 | `audit_log` | Quién cambió qué |
-| `settings` | Preferencias de app (tema, ocultar cifras, etc.) |
+| `settings` | Preferencias de app |
 
-## Qué no vive en esta BD (aún)
+## `company_financial_plans` (Estados y proyección)
 
-- Segunda BD por módulo.
-- Data warehouse separado.
-- Tokens en texto plano.
-- Credenciales hardcodeadas de MP/WC.
+| Campo | Nota |
+|-------|------|
+| `entity_id` | FK única a empresa |
+| `workbook_json` | Libro v2 + `template` `services`\|`products` |
+| Servicios | `clients[]` × mes + `expenses[]` |
+| Productos | `income_months[12]` + `expenses[]` (sin clientes) |
+| Creación | Al alta según `companies.business_model` |
+| Seed Soup IT | Solo servicios; Excel en `storage/templates/` |
 
 ## Repo `databases/`
 
 ```
 databases/
 ├── README.md
-├── apply-phpmyadmin.md
-└── patriumhub.sql          # único SQL: importar y listo
+├── patriumhub.sql                 # único SQL de instalación
+├── patch_estados_proyeccion.sql   # histórico (absorbido en 0.7.0)
+├── build_install_sql.py           # regenera install limpio desde dump
+└── archives/                      # dumps phpMyAdmin con datos (no instalar)
 ```
 
-`patriumhub.sql` es aplicable de una sola vez en phpMyAdmin, con `utf8mb4`, sin secretos de integraciones, e índices para dashboard.
+## Qué no vive en esta BD
+
+- Tokens en texto plano.
+- Credenciales hardcodeadas de MP/WC.
+- Segunda BD por módulo.

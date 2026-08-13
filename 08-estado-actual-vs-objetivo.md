@@ -2,56 +2,46 @@
 
 ## Resumen ejecutivo
 
-Hoy existen los **repos vacíos** (`PatriumHub/`, `databases/`, `Arquitectura/`) y el **documento de diseño de producto** (v1).  
-El objetivo es una app PHP monolítica + una BD MySQL desplegable en Apache/phpMyAdmin, con integraciones configurables desde pantallas.
+PatriumHub está **operativo** (MVP Fases 0–5 + módulos post-MVP).  
+Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` 0.7.0) en Apache/phpMyAdmin, con integraciones WC/MP desde pantallas.
 
-| Tema | Hoy (post Fase 5) | Objetivo |
-|------|-------------------|----------|
-| Código app | MVP completo (Fases 0–5) | Operación diaria + integraciones reales |
-| BD | Schema 0.5.0 + seed demo opcional | Backups periódicos |
-| Docs arquitectura | Set completo + HTTPS/backup | Mantener vivo |
-| Deploy | [Guía de deploy](guia-deploy.md) + implementación local | App en HTTPS |
-| Mercado Pago | Multi-cuenta desde UI | Probar con cuentas reales |
-| WooCommerce | Pantallas + sync stock/ventas | Probar con tienda real |
-| `.env` para MP/WC | Solo `DB_*` + `APP_URL`; tokens en menú | Mantener así |
-| Patrimonio | Modos personal / consolidado / entidad | Uso diario sin dobles |
-| UX / privacidad | Skeleton, chips, ocultar cifras, CSV | Feedback de uso real |
+| Tema | Hoy | Siguiente |
+|------|-----|-----------|
+| Código app | MVP + presupuestos, estados/proyección, edición movimientos, UX móvil | Uso diario + pulido |
+| BD | Schema **0.8.0** instalable en un solo SQL | Backups periódicos |
+| Docs | Arquitectura + Guía de uso alineadas a v1 actual | Mantener vivo |
+| Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
+| Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
+| WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |
+| Patrimonio | Personal / consolidado / entidad + snapshots | Rutina de captura |
+| Empresas | Resumen, caja, valuación, **Estados y proyección** | Proyecciones al día |
 
-## Diagrama gap
+## Diagrama (estado real)
 
 ```mermaid
 flowchart LR
-  subgraph now [Hoy]
-    Doc[Documento de diseno]
-    EmptyApp[PatriumHub vacio]
-    EmptyDB[databases vacio]
-    Arch[Arquitectura docs]
-  end
-
-  subgraph target [Objetivo]
-    App[PatriumHub PHP]
-    DB[(patriumhub)]
-    UIInt[Pantallas integraciones]
-    Cron[Cron sync]
-    App --> DB
-    UIInt --> App
-    Cron --> App
-  end
-
-  Doc --> Arch
-  Arch -.->|tras validar plan| App
-  Arch -.->|tras validar plan| DB
+  App[PatriumHub PHP]
+  DB[(patriumhub 0.7.0)]
+  UIInt[Integraciones WC/MP]
+  Cron[cron sync + snapshots]
+  App --> DB
+  UIInt --> App
+  Cron --> App
 ```
 
-## Prioridad técnica
+## Entregado post plan original (producto)
 
-1. Congelar docs de `Arquitectura/` ✅
-2. Schema `databases/patriumhub.sql` ✅
-3. Bootstrap PHP Apache ✅
-4. MVP patrimonio manual (Fase 1) ✅
-5. Pantallas de integraciones + cifrado ✅
-6. Sync WooCommerce ✅
-7. Sync multi Mercado Pago ✅
-8. Participaciones / anti-duplicación / historial ✅
-9. Pulido UX / seguridad / operación ✅
-10. Uso real + integraciones productivas ← siguiente
+Además de Fases 0–5:
+
+- Presupuestos mensuales (`budget_templates` / `budget_items`) con impacto en pasivos.
+- **Estados y proyección** por empresa (plantillas servicios / productos).
+- Usuarios con permisos por entidad en Configuración.
+- Movimientos editables con recálculo de saldos; borrado de cuentas en saldo 0.
+- Nav: Movimientos junto a Presupuestos; Configuración en perfil; MP en Cuentas.
+- Menú móvil (hamburger), ocultar cifras, exports CSV, snapshots por entidad.
+
+## Prioridad restante
+
+1. Uso real + backups documentados en operación.  
+2. HTTPS / endurecimiento de servidor.  
+3. Roadmap de producto (no bloquea el MVP).

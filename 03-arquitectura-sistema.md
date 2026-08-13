@@ -71,13 +71,14 @@ sequenceDiagram
 
   U->>App: Crear entidad Empresa
   App->>DB: INSERT entities + companies
+  App->>DB: INSERT company_financial_plans (plantilla)
   U->>App: Definir ownerships
   App->>DB: INSERT ownerships
   U->>App: Crear cuentas / activos / pasivos
   App->>DB: INSERT accounts, assets, liabilities...
-  U->>App: Ver dashboard empresa
-  App->>DB: Lee elementos de la entidad
-  App-->>U: Patrimonio calculado (sin duplicar)
+  U->>App: Estados y proyección / Resumen
+  App->>DB: Lee patrimonio + workbook
+  App-->>U: Patrimonio y proyección (sin duplicar)
 ```
 
 ## Flujo B — Conectar Mercado Pago (sin .env)
