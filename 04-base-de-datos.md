@@ -90,10 +90,10 @@ erDiagram
 | `budget_templates` | Gasto fijo recurrente (mensual) |
 | `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos |
 | `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro) |
-| `person_financial_plans` | Proyección personal: ingresos/egresos/ahorro (`workbook_json` v2). Insight UI: promedio mensual = disponible neto anual ÷ 12 |
+| `person_financial_plans` | Proyección personal (`workbook_json` v2 + % ahorro). Disponible neto = balance − ahorro (meta % solo sobre saldo positivo). UI: promedio mensual = neto ÷ 12; gasto diario = neto del mes ÷ días; carga = egresos + ahorro + disponible neto (y por categoría en ficha) |
 | `company_clients` | Fichas de cliente (empresas `services`): contacto, estado, notas; montos sync desde proyección |
 
-Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanService`, `ProjectionsAggregateService` (menú `/proyecciones`).
+Servicios de app: `BudgetService`, `FinancialPlanService` (ahorro solo si balance del mes > 0), `PersonFinancialPlanService`, `ProjectionsAggregateService` (menú `/proyecciones`: flujo, ahorro, carga egresos+ahorro+disponible neto; sin doughnut de composición en el flujo). En ficha persona, `person-financial-plan.js` añade desglose por nombre de egreso.
 
 ### Business / inventario
 

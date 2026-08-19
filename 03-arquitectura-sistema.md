@@ -170,7 +170,11 @@ flowchart LR
 ```
 
 - La carga es por ficha; el menú **Proyecciones** agrega año/alcance/moneda.
-- Bloques: KPIs de flujo, tiles de realidad, gráficos de flujo, bloque de ahorro, tablas por entidad.
+- Bloques UI consolidado: KPIs + realidad → flujo (ancho) → ahorro → tablas → **carga de egresos** (egresos + ahorro + disponible neto; mes a mes, total, por entidad y por grupo).
+- Ficha persona: flujo → planilla → **carga de egresos** con desglose **por categoría** (nombre de cada línea de egreso × % del ingreso anual).
+- **Gasto diario máximo** = disponible neto **del mes** (balance − ahorro) ÷ días de ese mes (12 cards + gráfico); referencia = promedio mensual ÷ 30.
+- Inicio / Dashboard: fila de **% sobre `total_assets`** bajo los 4 KPIs (`stat_pct_of_assets`).
+- No hay gráfico de “composición” ingresos vs egresos en el bloque de flujo (se lee en carga de egresos).
 
 ---
 

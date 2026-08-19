@@ -9,7 +9,7 @@ Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.6**) en Apache/php
 |------|-----|-----------|
 | Código app | MVP + presupuestos, proyecciones, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
 | BD | Schema **0.8.6** instalable en un solo SQL | Backups periódicos |
-| Docs | Arquitectura + Guía de uso v1.4 | Mantener vivo |
+| Docs | Arquitectura + Guía de uso v1.9 | Mantener vivo |
 | Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
 | Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
 | WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |

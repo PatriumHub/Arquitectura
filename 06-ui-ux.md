@@ -23,9 +23,9 @@ flowchart LR
 
 Barra superior (desktop) / panel hamburger (móvil):
 
-1. **Inicio** — resumen rápido  
-2. **Dashboard** — gráficos, snapshots, vistas guardadas  
-3. **Proyecciones** — flujo y ahorro consolidados del año (solo lectura)  
+1. **Inicio** — resumen rápido (+ fila % sobre activos)  
+2. **Dashboard** — gráficos, snapshots, vistas guardadas (+ fila % sobre activos)  
+3. **Proyecciones** — flujo, ahorro, carga de egresos y gasto diario (solo lectura)  
 4. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
 5. **Presupuestos**  
 6. **Movimientos**  
@@ -47,6 +47,7 @@ Filtros globales (moneda, entidad, fechas, origen) + chips activos + **vistas gu
 | Panel | Tipo |
 |-------|------|
 | KPIs | Patrimonio neto, activos, pasivos, liquidez |
+| % sobre activos | Segunda fila: qué % de los activos totales es cada KPI de arriba |
 | Composición | Cuentas, activos, propiedades, cobrables, inventario, participaciones |
 | Por entidad | Barras / participación |
 | Evolución | Snapshots (neto, activos, pasivos) |
@@ -55,8 +56,18 @@ Filtros globales (moneda, entidad, fechas, origen) + chips activos + **vistas gu
 
 ### Proyecciones (menú)
 
-Bloques: KPIs de flujo (incluye **promedio mensual** = disponible neto anual ÷ 12) → tiles de realidad (neto/liquidez/pasivos) → **Flujo del año** → **Ahorro proyectado** → tablas Personas / Empresas.  
-Filtros: año, alcance, moneda. Paleta unificada verde/coral.
+Orden de bloques:
+
+1. KPIs de flujo (incluye **promedio mensual** = disponible neto anual ÷ 12) y tiles de realidad  
+2. **Flujo del año** (gráfico ancho ingresos/egresos/balance; sin doughnut de composición) + personas vs empresas + por entidad  
+3. **Ahorro proyectado**  
+4. Tablas Personas / Empresas  
+5. **Carga de egresos** al final:
+   - Consolidado: anillo egresos + ahorro + disponible neto; mes a mes apilado; por entidad horizontal; personas vs empresas  
+   - Persona (ficha): lo mismo a nivel individual + **por categoría** (nombre de cada línea de egreso × % del ingreso)  
+6. **Gasto diario máximo**: 12 cards = disponible neto **del mes** (tras ahorro) ÷ días de ese mes; línea de referencia = promedio mensual ÷ 30; gráfico mes a mes.
+
+Filtros: año, alcance, moneda. Paleta unificada verde/coral. La carga de egresos usa egresos de planilla ÷ ingresos (no `budget_templates`). El verde del bloque es **disponible neto** (balance − ahorro), no el balance bruto. Partial de KPIs %: `app/Views/partials/stat_pct_of_assets.php` (Inicio + Dashboard).
 
 ### Ficha empresa — pestañas
 
@@ -73,7 +84,7 @@ Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crea
 
 `Resumen · Proyecciones · Cuentas · Activos · Pasivos · Propiedades · Cobrables · Movimientos · Participaciones`
 
-**Proyecciones:** tablero con neto real, KPIs del año, **promedio mensual** (disponible neto ÷ 12), gráficos de flujo/ahorro y planilla editable.
+**Proyecciones:** tablero con neto real, KPIs del año, **promedio mensual** (disponible neto ÷ 12), **flujo del año** a ancho completo, planilla editable y, al final, **carga de egresos** (egresos + ahorro + disponible neto; por nombre de egreso) + **gasto diario máximo** (neto tras ahorro ÷ días; ref. ÷ 30). Sin gráfico de “composición”.
 
 ### Listados de patrimonio
 
