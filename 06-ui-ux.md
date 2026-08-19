@@ -4,7 +4,16 @@
 
 PatriumHub es una sola app. La UI prioriza **comprensión patrimonial** sobre densidad de un ERP.
 
-Tema visual: fondo claro (`#f4f6f8`), acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras).
+Tema visual: claro por defecto; **modo oscuro** con `html[data-theme]` + `localStorage` (`patrium-theme`), mismo patrón que el sitio. Acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras). Toggle sol/luna siempre visible en la barra (desktop: a la derecha del nav; móvil: entre brand y hamburger).
+
+Tokens de contraste (no hay preferencia en BD):
+
+| Superficie | Token | Oscuro |
+|------------|-------|--------|
+| Cards KPI “hero” (`.stat.accent`) | `--navy` (superficie oscura en ambos temas) | slate `#243044` + texto blanco |
+| Cabeceras de tabla | `--table-head` | `#1c2430` |
+| Filas | `--table-row` / `--table-row-hover` | `#171d25` / `#1c2430` |
+| Cards tintadas (`tone-*`) | pasteles en claro | fondos `rgba(...)` sobre `--bg-elev` |
 
 ```mermaid
 flowchart LR
@@ -33,6 +42,8 @@ Barra superior (desktop) / panel hamburger (móvil):
 7. **Movimientos**  
 8. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
 9. Toggle **Ocultar cifras**
+10. Toggle **sol/luna** (tema claro/oscuro, por navegador)
+11. Botón **volver arriba** (esquina inferior derecha, aparece al scrollear)
 
 Configuración: cambiar nombre/email/contraseña; admin crea usuarios y tilda personas/empresas visibles.
 
@@ -147,3 +158,4 @@ Desde ficha persona/empresa: al guardar o cobrar volvés a esa pestaña **Cobrab
 | Carga | Skeleton en KPIs/tablas densas |
 | Error sync | Badge / mensaje en integraciones |
 | Privacidad | Clase `hide-amounts` en body |
+| Scroll largo | Botón fijo `#back-to-top` (aparece tras ~280px) |

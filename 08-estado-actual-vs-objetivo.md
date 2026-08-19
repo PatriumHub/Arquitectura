@@ -9,7 +9,7 @@ Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/php
 |------|-----|-----------|
 | Código app | MVP + presupuestos, proyecciones, objetivos, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
 | BD | Schema **0.8.7** instalable en un solo SQL | Backups periódicos |
-| Docs | Arquitectura + Guía de uso v2.3 | Mantener vivo |
+| Docs | Arquitectura + Guía de uso v2.5 | Mantener vivo |
 | Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
 | Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
 | WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |
@@ -43,7 +43,7 @@ Además de Fases 0–5:
 - Cuentas y activos compartidos entre personas (`account_owners` / `asset_owners`).
 - Usuarios con permisos por entidad en Configuración (viewer solo lectura).
 - Movimientos editables con recálculo de saldos; borrado de cuentas en saldo 0 / propiedades.
-- Nav: Proyecciones entre Dashboard y Patrimonio; Movimientos junto a Presupuestos; tema claro.
+- Nav: Proyecciones entre Dashboard y Patrimonio; Movimientos junto a Presupuestos; tema claro/oscuro (`patrium-theme`); botón volver arriba en el layout.
 - Menú móvil (hamburger), ocultar cifras, exports CSV, snapshots por entidad.
 
 ## Prioridad restante

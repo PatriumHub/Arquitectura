@@ -176,3 +176,5 @@ WHERE setting_key = 'schema.version';
 - Credenciales hardcodeadas de MP/WC.
 - Segunda BD por módulo.
 - Binarios de contratos/docs (solo metadatos en `documents`).
+- Preferencia de tema claro/oscuro (`localStorage patrium-theme` en el navegador).
+- Estado del botón “volver arriba” (solo UI).
