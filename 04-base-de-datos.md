@@ -8,7 +8,7 @@
 |-----------|-------------|-----------|
 | `patriumhub` | `databases/patriumhub.sql` | App PatriumHub |
 
-Schema version actual: **0.8.6** (ver `settings.schema.version`).
+Schema version actual: **0.8.7** (ver `settings.schema.version`).
 
 > Deploy: importar **solo** `databases/patriumhub.sql` en phpMyAdmin.  
 > Los patches históricos quedan absorbidos; no hace falta aplicar varios `.sql`.
@@ -38,6 +38,7 @@ erDiagram
   ENTITIES ||--o| COMPANY_FINANCIAL_PLANS : proyecta
   ENTITIES ||--o| PERSON_FINANCIAL_PLANS : proyecta_persona
   ENTITIES ||--o{ COMPANY_CLIENTS : fichas_cliente
+  FINANCIAL_GOALS }o--|| CURRENCIES : moneda
   COMPANY_CLIENTS ||--o{ DOCUMENTS : adjuntos
   PEOPLE ||--o{ OWNERSHIPS : participa
   COMPANIES ||--o{ OWNERSHIPS : es_participada
@@ -91,9 +92,10 @@ erDiagram
 | `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos |
 | `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro) |
 | `person_financial_plans` | Proyección personal (`workbook_json` v2 + % ahorro). Disponible neto = balance − ahorro (meta % solo sobre saldo positivo). UI: promedio mensual = neto ÷ 12; gasto diario = neto del mes ÷ días; carga = egresos + ahorro + disponible neto (y por categoría en ficha) |
+| `financial_goals` | Metas personalizadas (nombre, meta, juntado, fechas, moneda). Milestones NO son filas: MS01/MS03 usan `settings`; MS02 lee `liabilities` de personas |
 | `company_clients` | Fichas de cliente (empresas `services`): contacto, estado, notas; montos sync desde proyección |
 
-Servicios de app: `BudgetService`, `FinancialPlanService` (ahorro solo si balance del mes > 0), `PersonFinancialPlanService`, `ProjectionsAggregateService` (menú `/proyecciones`: flujo, ahorro, carga egresos+ahorro+disponible neto; sin doughnut de composición en el flujo). En ficha persona, `person-financial-plan.js` añade desglose por nombre de egreso.
+Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanService`, `ProjectionsAggregateService`, `FinancialGoalsService` (`/objetivos`: Cumplidos N/N, MS03 por año, alta en `/objetivos/nuevo`). En ficha persona, `person-financial-plan.js` añade desglose por nombre de egreso.
 
 ### Business / inventario
 

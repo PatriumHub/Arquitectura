@@ -3,17 +3,18 @@
 ## Resumen ejecutivo
 
 PatriumHub está **operativo** (MVP Fases 0–5 + módulos post-MVP).  
-Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.6**) en Apache/phpMyAdmin, con integraciones WC/MP desde pantallas.
+Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/phpMyAdmin, con integraciones WC/MP desde pantallas.
 
 | Tema | Hoy | Siguiente |
 |------|-----|-----------|
-| Código app | MVP + presupuestos, proyecciones, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
-| BD | Schema **0.8.6** instalable en un solo SQL | Backups periódicos |
-| Docs | Arquitectura + Guía de uso v1.9 | Mantener vivo |
+| Código app | MVP + presupuestos, proyecciones, objetivos, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
+| BD | Schema **0.8.7** instalable en un solo SQL | Backups periódicos |
+| Docs | Arquitectura + Guía de uso v2.1 | Mantener vivo |
 | Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
 | Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
 | WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |
 | Patrimonio | Personal / consolidado / entidad + snapshots + métricas en listados | Rutina de captura |
+| Objetivos | Milestones (Cumplidos N/N; MS03 ahorrado manual) + `financial_goals` + alta en `/objetivos/nuevo` | Ajustar meta fondo si hace falta |
 | Proyecciones | Planillas + menú consolidado + ahorro | Mantener planillas al día |
 | Presupuestos | Pending ≤ mes actual → pasivo; meses futuros no impactan neto | Liquidación mensual |
 

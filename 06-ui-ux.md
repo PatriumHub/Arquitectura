@@ -9,6 +9,7 @@ Tema visual: fondo claro (`#f4f6f8`), acento verde, tipografía **DM Sans** + **
 ```mermaid
 flowchart LR
   Brand[PatriumHub] --> Dash[Dashboards]
+  Brand --> Goals[Objetivos]
   Brand --> Proj[Proyecciones]
   Brand --> Master[ABMs patrimonio]
   Brand --> Budgets[Presupuestos]
@@ -25,12 +26,13 @@ Barra superior (desktop) / panel hamburger (móvil):
 
 1. **Inicio** — resumen rápido (+ fila % sobre activos)  
 2. **Dashboard** — gráficos, snapshots, vistas guardadas (+ fila % sobre activos)  
-3. **Proyecciones** — flujo, ahorro, carga de egresos y gasto diario (solo lectura)  
-4. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
-5. **Presupuestos**  
-6. **Movimientos**  
-7. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
-8. Toggle **Ocultar cifras**
+3. **Objetivos** — Objetivos fundamentales (milestones + metas; alta en `/objetivos/nuevo`)  
+4. **Proyecciones** — flujo, ahorro, carga de egresos y gasto diario (solo lectura)  
+5. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
+6. **Presupuestos**  
+7. **Movimientos**  
+8. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
+9. Toggle **Ocultar cifras**
 
 Configuración: cambiar nombre/email/contraseña; admin crea usuarios y tilda personas/empresas visibles.
 
@@ -53,6 +55,17 @@ Filtros globales (moneda, entidad, fechas, origen) + chips activos + **vistas gu
 | Evolución | Snapshots (neto, activos, pasivos) |
 | Flujo | Ingresos vs egresos del período |
 | Complemento | Últimos movimientos, capturar snapshot |
+
+### Objetivos (menú)
+
+Ruta `GET /objetivos` · alta `GET/POST /objetivos/nuevo` · progreso/eliminar por id · POST fondo / ahorro-15.
+
+1. **Milestones** (cards full-width + **Cumplidos N/N**):
+   - 01 fondo emergencia ARS 1.2M (juntado manual en `settings`)
+   - 02 deudas = pasivos abiertos de entidades `person`
+   - 03 meta auto = 15% ingreso neto personas del año en curso; ahorrado manual `goals.ramsey.ms03_saved_{año}_{moneda}`
+2. Corte visual.
+3. **Tus objetivos** (Cumplidos N/N + Agregar): listado `financial_goals`; formulario solo en `/objetivos/nuevo`.
 
 ### Proyecciones (menú)
 

@@ -174,6 +174,7 @@ flowchart LR
 - Ficha persona: flujo → planilla → **carga de egresos** con desglose **por categoría** (nombre de cada línea de egreso × % del ingreso anual).
 - **Gasto diario máximo** = disponible neto **del mes** (balance − ahorro) ÷ días de ese mes (12 cards + gráfico); referencia = promedio mensual ÷ 30.
 - Inicio / Dashboard: fila de **% sobre `total_assets`** bajo los 4 KPIs (`stat_pct_of_assets`).
+- Menú **Objetivos** (`FinancialGoalsService`): milestones 01–03 (Cumplidos N/N; MS01/MS03 manual; MS02 deudas personas) + `financial_goals` (listado + alta en `/objetivos/nuevo`); cards full-width.
 - No hay gráfico de “composición” ingresos vs egresos en el bloque de flujo (se lee en carga de egresos).
 
 ---
