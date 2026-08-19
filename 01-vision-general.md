@@ -12,6 +12,7 @@ No es un sistema contable, un ERP ni una app de presupuesto. Su misión es respo
 - ¿Qué parte corresponde a cada empresa?
 - ¿Cuánto me deben / cuánto debo?
 - ¿Cómo evolucionó y qué explica los cambios?
+- ¿Cómo se proyecta el flujo y el ahorro del año?
 
 ## Principios de arquitectura
 

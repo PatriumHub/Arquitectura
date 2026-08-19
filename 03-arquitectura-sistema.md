@@ -144,6 +144,8 @@ flowchart TD
   G --> H[Patrimonio neto + composición]
 ```
 
+**Pasivos de presupuesto:** solo `budget_items` con `status = pending`, `include_in_net_worth = 1` y `period_ym <= mes actual (Y-m)`. Los ítems de meses futuros no restan del neto.
+
 **Fórmula conceptual:**
 
 ```
@@ -152,6 +154,23 @@ Patrimonio = cuentas + activos + propiedades + cuentas por cobrar
 ```
 
 Regla anti-duplicación: en patrimonio personal se suma el valor de la **participación**, no los activos internos de la empresa.
+
+---
+
+## Flujo E — Proyecciones (planificación)
+
+```mermaid
+flowchart LR
+  P[Persona → Proyecciones] --> PF[(person_financial_plans)]
+  E[Empresa → Estados y proyección] --> CF[(company_financial_plans)]
+  PF --> AGG[ProjectionsAggregateService]
+  CF --> AGG
+  AGG --> UI[/proyecciones solo lectura]
+  R[PatrimonioService realidad] --> UI
+```
+
+- La carga es por ficha; el menú **Proyecciones** agrega año/alcance/moneda.
+- Bloques: KPIs de flujo, tiles de realidad, gráficos de flujo, bloque de ahorro, tablas por entidad.
 
 ---
 

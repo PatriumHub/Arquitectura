@@ -8,7 +8,7 @@
 | Audiencia | Usuario dueño del patrimonio (uso personal / familiar / multiempresa) |
 | Stack | PHP 8+ (front + back), HTML/CSS/JS, MySQL/MariaDB |
 | Servidor | Apache |
-| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.8.2) |
+| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.8.6) |
 | Deploy BD | phpMyAdmin (un solo import; sin patches encadenados) |
 | Framework | PHP modular (MVC ligero). Sin Laravel obligatorio en MVP |
 | Contenedores | No requeridos. Apache + MySQL nativos |
@@ -22,9 +22,11 @@ PatriumHub concentra en una sola app:
 - Autenticación y usuarios.
 - ABM de entidades (personas / empresas).
 - Cuentas, activos, propiedades, cobrables, pasivos, inventario, participaciones.
-- Presupuestos mensuales y liquidación.
-- Estados y proyección por empresa (ingresos/costos planificados).
+- Presupuestos mensuales y liquidación (pending del mes actual/atrasados → pasivo).
+- Proyección personal (`person_financial_plans`) y Estados y proyección por empresa.
+- Vista consolidada **Proyecciones** (`/proyecciones`, solo lectura).
 - Fichas de clientes (empresas de servicios): contacto, estado, contrato PDF y docs.
+- Listados de patrimonio con métricas y gráficos (totales, por tipo / entidad).
 - Movimientos e historial (alta/edición con ajuste de saldos).
 - Dashboards fijos con filtros y vistas guardadas.
 - Pantallas de configuración de integraciones (MP / WooCommerce).
@@ -32,9 +34,9 @@ PatriumHub concentra en una sola app:
 
 ### Lo que puede hacer
 - Calcular patrimonio por entidad, personal y consolidado.
+- Planificar flujo y ahorro anual (persona, empresa y consolidado) sin tocar cuentas.
 - Sincronizar datos de lectura desde WooCommerce y Mercado Pago.
 - Guardar historial de saldos, valuaciones, snapshots y syncs.
-- Planificar ingresos/egresos anuales por empresa sin tocar cuentas.
 - Auditar altas, bajas, ediciones y sincronizaciones.
 
 ### Lo que no debe hacer
@@ -68,10 +70,11 @@ PatriumHub/                 # se copia al server como /patrium
 |--------|-----------------|
 | Identity | Usuarios, roles, sesiones, entidades |
 | Wealth | Cuentas, activos, pasivos, cobrables, patrimonio |
+| Planning | Presupuestos, planillas persona/empresa, proyecciones consolidadas |
 | Business | Empresas, inventario, ventas, participaciones |
 | Transactions | Movimientos y categorías |
 | Integrations | Conexiones WC/MP, pantallas de credenciales, sync |
-| Analytics | Métricas, snapshots, dashboards |
+| Analytics | Métricas, snapshots, dashboards, gráficos de listados |
 | Documents | Adjuntos |
 | Audit | Historial y trazabilidad |
 

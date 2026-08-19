@@ -8,7 +8,7 @@
 |-----------|-------------|-----------|
 | `patriumhub` | `databases/patriumhub.sql` | App PatriumHub |
 
-Schema version actual: **0.8.2** (ver `settings.schema.version`).
+Schema version actual: **0.8.6** (ver `settings.schema.version`).
 
 > Deploy: importar **solo** `databases/patriumhub.sql` en phpMyAdmin.  
 > Los patches históricos quedan absorbidos; no hace falta aplicar varios `.sql`.
@@ -36,12 +36,17 @@ erDiagram
   ENTITIES ||--o{ INVENTORIES : stock
   ENTITIES ||--o{ INTEGRATIONS : conecta
   ENTITIES ||--o| COMPANY_FINANCIAL_PLANS : proyecta
+  ENTITIES ||--o| PERSON_FINANCIAL_PLANS : proyecta_persona
   ENTITIES ||--o{ COMPANY_CLIENTS : fichas_cliente
   COMPANY_CLIENTS ||--o{ DOCUMENTS : adjuntos
   PEOPLE ||--o{ OWNERSHIPS : participa
   COMPANIES ||--o{ OWNERSHIPS : es_participada
   COMPANIES ||--o{ BUSINESS_VALUATIONS : valuada
   ACCOUNTS ||--o{ ACCOUNT_BALANCES : historial
+  ACCOUNTS ||--o{ ACCOUNT_OWNERS : co_titulares
+  ENTITIES ||--o{ ACCOUNT_OWNERS : participa_cuenta
+  ASSETS ||--o{ ASSET_OWNERS : co_titulares
+  ENTITIES ||--o{ ASSET_OWNERS : participa_activo
   ACCOUNTS ||--o{ TRANSACTIONS : mueve
   ENTITIES ||--o{ BUDGET_TEMPLATES : gasta
   BUDGET_TEMPLATES ||--o{ BUDGET_ITEMS : instancia
@@ -68,8 +73,10 @@ erDiagram
 | Tabla | Uso |
 |-------|-----|
 | `accounts` | Bancos, billeteras, efectivo, MP, brokers |
+| `account_owners` | Co-titulares personas (`ownership_pct` por persona); empresas usan solo `accounts.entity_id` |
 | `account_balances` | Historial de saldos |
-| `assets` | Activos generales (pueden vincularse a cuenta) |
+| `assets` | Activos varios; empresas al 100% en `entity_id` |
+| `asset_owners` | Co-titulares personas (`ownership_pct` por persona) |
 | `properties` | Inmuebles |
 | `receivables` | Dinero a cobrar |
 | `liabilities` | Pasivos / obligaciones |
@@ -81,9 +88,12 @@ erDiagram
 | Tabla | Uso |
 |-------|-----|
 | `budget_templates` | Gasto fijo recurrente (mensual) |
-| `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`) |
-| `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2) |
+| `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos |
+| `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro) |
+| `person_financial_plans` | Proyección personal: ingresos/egresos/ahorro (`workbook_json` v2). Insight UI: promedio mensual = disponible neto anual ÷ 12 |
 | `company_clients` | Fichas de cliente (empresas `services`): contacto, estado, notas; montos sync desde proyección |
+
+Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanService`, `ProjectionsAggregateService` (menú `/proyecciones`).
 
 ### Business / inventario
 
@@ -145,7 +155,15 @@ erDiagram
 
 ```
 databases/
-└── patriumhub.sql                 # único SQL de instalación
+└── patriumhub.sql                 # único SQL de instalación (0.8.6)
+```
+
+Instalación nueva: importar ese archivo.  
+BD ya en **0.8.5**: la app crea `account_owners` sola al usar Cuentas (`AccountOwnerService::ensureSchema`). Para alinear el número:
+
+```sql
+UPDATE settings SET setting_value = '0.8.6', updated_at = CURRENT_TIMESTAMP
+WHERE setting_key = 'schema.version';
 ```
 
 ## Qué no vive en esta BD

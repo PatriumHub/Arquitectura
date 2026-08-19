@@ -4,11 +4,12 @@
 
 PatriumHub es una sola app. La UI prioriza **comprensión patrimonial** sobre densidad de un ERP.
 
-Tema visual: fondo carbón, acento ámbar, tipografía display + sans.
+Tema visual: fondo claro (`#f4f6f8`), acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras).
 
 ```mermaid
 flowchart LR
   Brand[PatriumHub] --> Dash[Dashboards]
+  Brand --> Proj[Proyecciones]
   Brand --> Master[ABMs patrimonio]
   Brand --> Budgets[Presupuestos]
   Brand --> Tx[Movimientos]
@@ -24,11 +25,12 @@ Barra superior (desktop) / panel hamburger (móvil):
 
 1. **Inicio** — resumen rápido  
 2. **Dashboard** — gráficos, snapshots, vistas guardadas  
-3. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
-4. **Presupuestos**  
-5. **Movimientos**  
-6. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
-7. Toggle **Ocultar cifras**
+3. **Proyecciones** — flujo y ahorro consolidados del año (solo lectura)  
+4. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
+5. **Presupuestos**  
+6. **Movimientos**  
+7. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
+8. Toggle **Ocultar cifras**
 
 Configuración: cambiar nombre/email/contraseña; admin crea usuarios y tilda personas/empresas visibles.
 
@@ -51,6 +53,11 @@ Filtros globales (moneda, entidad, fechas, origen) + chips activos + **vistas gu
 | Flujo | Ingresos vs egresos del período |
 | Complemento | Últimos movimientos, capturar snapshot |
 
+### Proyecciones (menú)
+
+Bloques: KPIs de flujo (incluye **promedio mensual** = disponible neto anual ÷ 12) → tiles de realidad (neto/liquidez/pasivos) → **Flujo del año** → **Ahorro proyectado** → tablas Personas / Empresas.  
+Filtros: año, alcance, moneda. Paleta unificada verde/coral.
+
 ### Ficha empresa — pestañas
 
 `Resumen · Cuentas · [Clientes] · Estados y proyección · Activos varios · Pasivos · Propiedades · Inventario · Cobrables · Movimientos · Integraciones · Participaciones · Valuación`
@@ -64,7 +71,13 @@ Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crea
 
 ### Ficha persona — pestañas
 
-`Resumen · Cuentas · Activos · Pasivos · Propiedades · Cobrables · Movimientos · Participaciones`
+`Resumen · Proyecciones · Cuentas · Activos · Pasivos · Propiedades · Cobrables · Movimientos · Participaciones`
+
+**Proyecciones:** tablero con neto real, KPIs del año, **promedio mensual** (disponible neto ÷ 12), gráficos de flujo/ahorro y planilla editable.
+
+### Listados de patrimonio
+
+Cada listado (cuentas, activos, propiedades, cobrables, pasivos, inventario, personas, empresas, participaciones) muestra **métricas** arriba y, cuando aplica, gráficos por tipo / entidad + filtro de moneda.
 
 ### Cuentas
 
@@ -81,16 +94,17 @@ Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). 
 4. Cargar activos / pasivos / cobrables.  
 5. Completar **Estados y proyección** si aplica.  
 6. En servicios: completar fichas en **Clientes** (contacto, contrato, docs).  
-7. Revisar resumen / valuación.
+7. Revisar resumen / valuación / menú Proyecciones.
 
 ### Alta de cuenta
-Desde Cuentas (elige entidad) o desde ficha de empresa.
+Desde Cuentas: titularidad persona(s) con % o empresa; saldo; tipo. Las cuentas personales pueden compartirse entre varias personas.
 
 ### Conectar integración
 Perfil → Integraciones → proveedor → entidad + credenciales → probar → sync.
 
 ### Presupuesto del mes
-Presupuestos → asegurar período → pagar / omitir / revertir. Los `pending` suman a pasivos.
+Presupuestos → asegurar período → pagar / omitir / revertir.  
+Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un mes futuro no baja el neto.
 
 ### Dinero prestado
 Alta como cobrable → pagos parciales hasta cancelar.

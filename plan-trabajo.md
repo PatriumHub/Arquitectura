@@ -1,7 +1,7 @@
 # Plan de trabajo PatriumHub
 
-**Estado:** ✅ Fases 0–5 completas + post-MVP (presupuestos, estados/proyección)  
-**Stack fijado:** PHP (front + back) · 1 BD MySQL (`patriumhub.sql` 0.8.2) · Apache · phpMyAdmin  
+**Estado:** ✅ Fases 0–5 completas + post-MVP (presupuestos, proyecciones, clientes, métricas)  
+**Stack fijado:** PHP (front + back) · 1 BD MySQL (`patriumhub.sql` 0.8.6) · Apache · phpMyAdmin  
 **Integraciones:** tokens solo en pantallas; cifrado vía Configuración (`storage/app.key`); `.env` = solo DB/URL
 
 Este plan une:
@@ -121,14 +121,17 @@ flowchart LR
 
 | Entrega | Estado |
 |---------|--------|
-| Presupuestos mensuales + pasivo pendiente | ✅ |
+| Presupuestos mensuales + pasivo (solo ≤ mes actual) | ✅ |
 | Estados y proyección (servicios / productos) | ✅ |
+| Proyecciones personales + menú consolidado + ahorro | ✅ |
 | Clientes (fichas + docs PDF; sync desde proyección) | ✅ |
+| Métricas/gráficos en listados de patrimonio | ✅ |
+| Cuentas compartidas entre personas (`account_owners`) | ✅ |
 | Usuarios + permisos por entidad en Configuración | ✅ |
 | Edición de movimientos con ajuste de saldos | ✅ |
 | Borrado de cuentas en saldo 0 | ✅ |
 | Nav móvil, ocultar cifras, CSV, snapshots entidad | ✅ |
-| SQL instalación única schema 0.8.2 | ✅ |
+| SQL instalación única schema 0.8.6 | ✅ |
 
 ## Próximo paso
 
