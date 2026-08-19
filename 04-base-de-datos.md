@@ -79,7 +79,7 @@ erDiagram
 | `assets` | Activos varios; empresas al 100% en `entity_id` |
 | `asset_owners` | Co-titulares personas (`ownership_pct` por persona) |
 | `properties` | Inmuebles |
-| `receivables` | Dinero a cobrar |
+| `receivables` | Dinero a cobrar (`due_date`, status incl. `paid`). UI: cabeceras ordenables; ficha entidad muestra Vence; alta/cobro desde ficha vuelve con `return_to` (`safe_return_path`) |
 | `liabilities` | Pasivos / obligaciones |
 | `currencies` | Catálogo ARS/USD/EUR |
 | `tags` / `entity_tags` | Etiquetas opcionales (reservado) |
@@ -90,8 +90,8 @@ erDiagram
 |-------|-----|
 | `budget_templates` | Gasto fijo recurrente (mensual) |
 | `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos |
-| `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro) |
-| `person_financial_plans` | Proyección personal (`workbook_json` v2 + % ahorro). Disponible neto = balance − ahorro (meta % solo sobre saldo positivo). UI: promedio mensual = neto ÷ 12; gasto diario = neto del mes ÷ días; carga = egresos + ahorro + disponible neto (y por categoría en ficha) |
+| `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro). Misma regla de disponible neto que persona. UI: año default = calendario; Comparativa ↔ Detalle sincronizados; carga de egresos (anillo + mes a mes + por categoría) y gasto diario máximo (neto ÷ días; ref. ÷ 30); `+ Año` sin prompt |
+| `person_financial_plans` | Proyección personal (`workbook_json` v2 + % ahorro). Disponible neto = balance − ahorro (meta % solo sobre saldo positivo). UI: año default = calendario; promedio mensual = neto ÷ 12; gasto diario = neto del mes ÷ días; carga = egresos + ahorro + disponible neto (y por categoría en ficha) |
 | `financial_goals` | Metas personalizadas (nombre, meta, juntado, fechas, moneda). Milestones NO son filas: MS01/MS03 usan `settings`; MS02 lee `liabilities` de personas |
 | `company_clients` | Fichas de cliente (empresas `services`): contacto, estado, notas; montos sync desde proyección |
 
@@ -142,6 +142,8 @@ Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanS
 | Productos | `income_months[12]` + `expenses[]` (sin clientes) |
 | Creación | Al alta según `companies.business_model` |
 | Seed Soup IT | Solo servicios; Excel en `storage/templates/` |
+| UI al pie | Carga de egresos + gasto diario máximo (misma lógica que persona) |
+| Año activo | Default = calendario; Comparativa y Detalle sincronizados; `+ Año` = siguiente año |
 
 ## `company_clients` (pestaña Clientes)
 
@@ -157,14 +159,14 @@ Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanS
 
 ```
 databases/
-└── patriumhub.sql                 # único SQL de instalación (0.8.6)
+└── patriumhub.sql                 # único SQL de instalación (0.8.7)
 ```
 
 Instalación nueva: importar ese archivo.  
-BD ya en **0.8.5**: la app crea `account_owners` sola al usar Cuentas (`AccountOwnerService::ensureSchema`). Para alinear el número:
+BD ya en **0.8.6** o anterior con tablas al día: solo alinear el número si hace falta:
 
 ```sql
-UPDATE settings SET setting_value = '0.8.6', updated_at = CURRENT_TIMESTAMP
+UPDATE settings SET setting_value = '0.8.7', updated_at = CURRENT_TIMESTAMP
 WHERE setting_key = 'schema.version';
 ```
 

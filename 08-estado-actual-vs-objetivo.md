@@ -9,7 +9,7 @@ Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/php
 |------|-----|-----------|
 | Código app | MVP + presupuestos, proyecciones, objetivos, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
 | BD | Schema **0.8.7** instalable en un solo SQL | Backups periódicos |
-| Docs | Arquitectura + Guía de uso v2.1 | Mantener vivo |
+| Docs | Arquitectura + Guía de uso v2.3 | Mantener vivo |
 | Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
 | Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
 | WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |
@@ -23,7 +23,7 @@ Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/php
 ```mermaid
 flowchart LR
   App[PatriumHub PHP]
-  DB[(patriumhub 0.8.6)]
+  DB[(patriumhub 0.8.7)]
   UIInt[Integraciones WC/MP]
   Cron[cron sync + snapshots]
   App --> DB
@@ -36,7 +36,7 @@ flowchart LR
 Además de Fases 0–5:
 
 - Presupuestos mensuales (`budget_templates` / `budget_items`) con impacto en pasivos **solo del mes actual y atrasados**.
-- **Estados y proyección** por empresa + **Proyecciones** personales (`person_financial_plans`).
+- **Estados y proyección** por empresa + **Proyecciones** personales (`person_financial_plans`): carga de egresos, gasto diario, año activo = calendario (empresa: Comparativa ↔ Detalle).
 - Menú **Proyecciones** consolidado (flujo + ahorro, solo lectura).
 - **Clientes** para empresas de servicios (`company_clients` + docs en `documents`).
 - Métricas y gráficos en listados de patrimonio; Chart.js self-hosted.

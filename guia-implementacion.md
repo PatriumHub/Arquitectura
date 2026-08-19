@@ -35,7 +35,7 @@ Ver [guía de deploy](guia-deploy.md).
 
 ## 3. Base de datos (phpMyAdmin)
 
-1. Importar **solo** `databases/patriumhub.sql` (crea BD + tablas + seed mínimo; schema 0.8.6).  
+1. Importar **solo** `databases/patriumhub.sql` (crea BD + tablas + seed mínimo; schema 0.8.7).  
    No hace falta aplicar patches sueltos.
 2. Crear usuario MySQL dedicado:
 

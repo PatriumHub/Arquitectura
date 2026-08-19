@@ -171,7 +171,8 @@ flowchart LR
 
 - La carga es por ficha; el menú **Proyecciones** agrega año/alcance/moneda.
 - Bloques UI consolidado: KPIs + realidad → flujo (ancho) → ahorro → tablas → **carga de egresos** (egresos + ahorro + disponible neto; mes a mes, total, por entidad y por grupo).
-- Ficha persona: flujo → planilla → **carga de egresos** con desglose **por categoría** (nombre de cada línea de egreso × % del ingreso anual).
+- Ficha persona: flujo → planilla → **carga de egresos** con desglose **por categoría** (nombre de cada línea de egreso × % del ingreso anual) + **gasto diario máximo**; año activo default = calendario.
+- Ficha empresa (Estados y proyección): **Comparativa** + **Detalle** sincronizados (mismo año activo; default = calendario) → planilla → **carga de egresos** (misma lógica + por categoría) y **gasto diario máximo**. «+ Año» agrega el siguiente año sin prompt.
 - **Gasto diario máximo** = disponible neto **del mes** (balance − ahorro) ÷ días de ese mes (12 cards + gráfico); referencia = promedio mensual ÷ 30.
 - Inicio / Dashboard: fila de **% sobre `total_assets`** bajo los 4 KPIs (`stat_pct_of_assets`).
 - Menú **Objetivos** (`FinancialGoalsService`): milestones 01–03 (Cumplidos N/N; MS01/MS03 manual; MS02 deudas personas) + `financial_goals` (listado + alta en `/objetivos/nuevo`); cards full-width.

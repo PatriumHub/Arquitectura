@@ -23,7 +23,7 @@ Documentación de referencia del sistema **PatriumHub**: centro de comando patri
 ```
 PatriumHub/
 ├── PatriumHub/      # Código PHP (front + back en una sola app)
-├── databases/       # patriumhub.sql (instalación única, schema 0.8.6)
+├── databases/       # patriumhub.sql (instalación única, schema 0.8.7)
 ├── Guia_De_Uso/     # Manual de usuario en español
 └── Arquitectura/    # Esta documentación
 ```
@@ -55,4 +55,4 @@ Documentación viva. **Fases 0–5 aplicadas (MVP completo)** + módulos post-MV
 - Operación local: [guía de implementación](guia-implementacion.md)  
 - Operación producción: [guía de deploy](guia-deploy.md)  
 - Manual de usuario: [`../Guia_De_Uso/`](../Guia_De_Uso/README.md)  
-- BD: un solo archivo [`../databases/patriumhub.sql`](../databases/patriumhub.sql) (schema **0.8.6**)
+- BD: un solo archivo [`../databases/patriumhub.sql`](../databases/patriumhub.sql) (schema **0.8.7**)

@@ -88,7 +88,9 @@ Filtros: año, alcance, moneda. Paleta unificada verde/coral. La carga de egreso
 
 **Clientes** (solo `business_model = services`): listado sync desde proyección, KPIs activo/inactivo, ficha con contacto, contrato PDF y docs extra.
 
-**Estados y proyección:** dashboard de KPIs + tablas HTML.  
+**Estados y proyección:** dashboard (Comparativa por año + Detalle del año) + tablas HTML +, al final, **carga de egresos** (egresos + ahorro + disponible neto; por nombre de costo) y **gasto diario máximo** (neto tras ahorro ÷ días; ref. ÷ 30).  
+- Año activo: por defecto el **año calendario**; el select de Comparativa y las pills de Detalle comparten el mismo índice.  
+- **+ Año** agrega el siguiente año numérico (sin prompt); doble clic en la pill para renombrar.  
 - Servicios: clientes × mes + costos.  
 - Productos: ingresos totales por mes + costos.  
 Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crear** la empresa.
@@ -97,11 +99,11 @@ Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crea
 
 `Resumen · Proyecciones · Cuentas · Activos · Pasivos · Propiedades · Cobrables · Movimientos · Participaciones`
 
-**Proyecciones:** tablero con neto real, KPIs del año, **promedio mensual** (disponible neto ÷ 12), **flujo del año** a ancho completo, planilla editable y, al final, **carga de egresos** (egresos + ahorro + disponible neto; por nombre de egreso) + **gasto diario máximo** (neto tras ahorro ÷ días; ref. ÷ 30). Sin gráfico de “composición”.
+**Proyecciones:** tablero con neto real, KPIs del año, **promedio mensual** (disponible neto ÷ 12), **flujo del año** a ancho completo, planilla editable y, al final, **carga de egresos** (egresos + ahorro + disponible neto; por nombre de egreso) + **gasto diario máximo** (neto tras ahorro ÷ días; ref. ÷ 30). Año activo por defecto = calendario. Sin gráfico de “composición”.
 
 ### Listados de patrimonio
 
-Cada listado (cuentas, activos, propiedades, cobrables, pasivos, inventario, personas, empresas, participaciones) muestra **métricas** arriba y, cuando aplica, gráficos por tipo / entidad + filtro de moneda.
+Cada listado (cuentas, activos, propiedades, cobrables, pasivos, inventario, personas, empresas, participaciones) muestra **métricas** arriba y, cuando aplica, gráficos por tipo / entidad + filtro de moneda. **Cobrables:** cabeceras ordenables; en ficha persona/empresa también columna **Vence**; alta/cobro desde ficha vuelve a la entidad (`return_to`).
 
 ### Cuentas
 
@@ -132,7 +134,8 @@ Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un me
 **Gastos agrupados:** por entidad, con composición (% por nombre) y ranking de mayor a menor.
 
 ### Dinero prestado
-Alta como cobrable → pagos parciales hasta cancelar.
+Alta como cobrable → marcar pago (acredita en cuenta) hasta cancelar.  
+Desde ficha persona/empresa: al guardar o cobrar volvés a esa pestaña **Cobrables**.
 
 ---
 
