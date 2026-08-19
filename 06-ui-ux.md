@@ -104,7 +104,8 @@ Perfil → Integraciones → proveedor → entidad + credenciales → probar →
 
 ### Presupuesto del mes
 Presupuestos → asegurar período → pagar / omitir / revertir.  
-Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un mes futuro no baja el neto.
+Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un mes futuro no baja el neto.  
+**Gastos agrupados:** por entidad, con composición (% por nombre) y ranking de mayor a menor.
 
 ### Dinero prestado
 Alta como cobrable → pagos parciales hasta cancelar.
