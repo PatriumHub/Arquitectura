@@ -37,13 +37,14 @@ Barra superior (desktop) / panel hamburger (móvil):
 2. **Dashboard** — gráficos, snapshots, vistas guardadas (+ fila % sobre activos)  
 3. **Objetivos** — Objetivos fundamentales (milestones + metas; alta en `/objetivos/nuevo`)  
 4. **Proyecciones** — flujo, ahorro, carga de egresos y gasto diario (solo lectura)  
-5. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario  
-6. **Presupuestos**  
+5. **Presupuestos**  
+6. **Gastos** — análisis de egresos (real + presupuesto + proyección; `/gastos`)  
 7. **Movimientos**  
-8. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
-9. Toggle **Ocultar cifras**
-10. Toggle **sol/luna** (tema claro/oscuro, por navegador)
-11. Botón **volver arriba** (esquina inferior derecha, aparece al scrollear)
+8. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario (último; summary con accent ámbar)  
+9. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
+10. Toggle **Ocultar cifras**
+11. Toggle **sol/luna** (tema claro/oscuro, por navegador)
+12. Botón **volver arriba** (esquina inferior derecha, aparece al scrollear)
 
 Configuración: cambiar nombre/email/contraseña; admin crea usuarios y tilda personas/empresas visibles.
 
@@ -116,9 +117,29 @@ Un libro por empresa; hojas por año. El tipo de negocio se elige **solo al crea
 
 Cada listado (cuentas, activos, propiedades, cobrables, pasivos, inventario, personas, empresas, participaciones) muestra **métricas** arriba y, cuando aplica, gráficos por tipo / entidad + filtro de moneda. **Cobrables:** cabeceras ordenables; en ficha persona/empresa también columna **Vence**; alta/cobro desde ficha vuelve a la entidad (`return_to`).
 
+### Gastos (menú)
+
+Ruta `GET /gastos` · `ExpenseAnalysisService` + `ExpensesController`.
+
+Filtros: `preset` (30d/month/90d/ytd/year/custom), `from`/`to`, `currency`, y `entity_id` con valores:
+- vacío → todas las entidades (`scope=all`)
+- `people` / `companies` → todas las personas o todas las empresas (`ExpenseAnalysisService` resuelve IDs vía `Catalog::entities`)
+- id numérico → una entidad (`scope=entity`)
+
+KPIs y gráficos cruzan:
+1. **Real** — `transactions` tipo `expense` / `payment` (/ `egreso`)
+2. **Presupuesto** — totales de `budget_items` del mes de cierre del rango (mismo filtro de entidades)
+3. **Proyección** — egreso anual de planilla prorrateado al largo del período (`ProjectionsAggregateService` con scope people/companies/all, o planilla de la entidad)
+
+Incluye barras apiladas **horizontales** categoría × mes del año calendario (`by_category_month`: siempre ene–dic del año de `to`; colores; tooltip monto + % del mes). Rankings entidad/categoría/cuenta también en barras horizontales. Categorías de movimiento enriquecidas vía seed + `Catalog::ensureTransactionCategories` (Comida, Salidas, Suscripciones, Alquiler/es, etc.).
+
 ### Cuentas
 
-Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). Incluye cuentas Mercado Pago sincronizadas.
+Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). Incluye cuentas Mercado Pago sincronizadas. Acciones de fila en grilla fija (Editar / Movimiento / Eliminar) para no romper el layout. Los botones **Eliminar** de la app usan `btn danger` (rojo).
+
+### Activos varios
+
+Alta/edición + **eliminar** (`POST /activos/{id}/eliminar`) desde listado y ficha; borra `asset_owners` y el activo.
 
 ---
 
