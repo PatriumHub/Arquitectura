@@ -4,7 +4,9 @@
 
 PatriumHub es una sola app. La UI prioriza **comprensión patrimonial** sobre densidad de un ERP.
 
-Tema visual: claro por defecto; **modo oscuro** con `html[data-theme]` + `localStorage` (`patrium-theme`), mismo patrón que el sitio. Acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras). Toggle sol/luna siempre visible en la barra (desktop: a la derecha del nav; móvil: entre brand y hamburger).
+Tema visual: claro por defecto; **modo oscuro** con `html[data-theme]` + `localStorage` (`patrium-theme`), mismo patrón que el sitio. Acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras). Toggle sol/luna siempre visible en la barra (desktop: a la derecha del nav; móvil: entre brand y hamburger). Al cambiar tema se dispara `patrium:theme` y los Chart.js de listados/gastos/gastos agrupados se **vuelven a pintar** (ticks/leyendas legibles en ambos modos).
+
+Acciones de filas en tablas: helpers `ui_icon` / `icon_action_link` / `icon_action_button` (clase `.btn-icon`). Convención de color: **Eliminar** = rojo (`danger`); **Pagar / Cobrar** = amarillo (`warn`). Las celdas de acción usan `td.actions` como `table-cell` (no `display:flex` del toolbar `.page-head .actions`).
 
 Tokens de contraste (no hay preferencia en BD):
 
@@ -135,7 +137,11 @@ Incluye barras apiladas **horizontales** categoría × mes del año calendario (
 
 ### Cuentas
 
-Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). Incluye cuentas Mercado Pago sincronizadas. Acciones de fila en grilla fija (Editar / Movimiento / Eliminar) para no romper el layout. Los botones **Eliminar** de la app usan `btn danger` (rojo).
+Listado con saldos, gráficos de composición, alta/edición/borrado (saldo 0). Incluye cuentas Mercado Pago sincronizadas. Acciones de fila con iconos (Editar / Movimiento / Eliminar).
+
+### Movimientos
+
+Listado paginado; editar y **eliminar** (`POST /movimientos/{id}/eliminar`) recalculan saldos. Si el movimiento estaba ligado a un `budget_items` pagado, el ítem vuelve a `pending`.
 
 ### Activos varios
 
@@ -163,7 +169,7 @@ Perfil → Integraciones → proveedor → entidad + credenciales → probar →
 ### Presupuesto del mes
 Presupuestos → asegurar período → pagar / omitir / revertir.  
 Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un mes futuro no baja el neto.  
-**Gastos agrupados:** por entidad, con composición (% por nombre) y ranking de mayor a menor.
+**Gastos agrupados:** por entidad, con composición (% por nombre) y ranking de mayor a menor; los charts reaccionan al toggle de tema.
 
 ### Dinero prestado
 Alta como cobrable → marcar pago (acredita en cuenta) hasta cancelar.  

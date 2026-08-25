@@ -1,4 +1,4 @@
-# 02 — Plataforma
+﻿# 02 — Plataforma
 
 ## Resumen
 
@@ -8,7 +8,7 @@
 | Audiencia | Usuario dueño del patrimonio (uso personal / familiar / multiempresa) |
 | Stack | PHP 8+ (front + back), HTML/CSS/JS, MySQL/MariaDB |
 | Servidor | Apache |
-| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.8.7) |
+| BD | Una sola: `patriumhub` — install `databases/patriumhub.sql` (0.8.8) |
 | Deploy BD | phpMyAdmin (un solo import; sin patches encadenados) |
 | Framework | PHP modular (MVC ligero). Sin Laravel obligatorio en MVP |
 | Contenedores | No requeridos. Apache + MySQL nativos |

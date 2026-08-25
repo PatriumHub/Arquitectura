@@ -1,4 +1,4 @@
-# 09 — Guía de implementación
+﻿# 09 — Guía de implementación
 
 Guía operativa para levantar PatriumHub en **local / XAMPP** con Apache + MySQL/MariaDB + phpMyAdmin.
 
@@ -35,7 +35,7 @@ Ver [guía de deploy](guia-deploy.md).
 
 ## 3. Base de datos (phpMyAdmin)
 
-1. Importar **solo** `databases/patriumhub.sql` (crea BD + tablas + seed mínimo; schema 0.8.7).  
+1. Importar **solo** `databases/patriumhub.sql` (crea BD + tablas + seed mínimo; schema 0.8.8).  
    No hace falta aplicar patches sueltos.
 2. Crear usuario MySQL dedicado:
 

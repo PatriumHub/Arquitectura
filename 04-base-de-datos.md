@@ -8,7 +8,7 @@
 |-----------|-------------|-----------|
 | `patriumhub` | `databases/patriumhub.sql` | App PatriumHub |
 
-Schema version actual: **0.8.7** (ver `settings.schema.version`).
+Schema version actual: **0.8.8** (ver `settings.schema.version`).
 
 > Deploy: importar **solo** `databases/patriumhub.sql` en phpMyAdmin.  
 > Los patches históricos quedan absorbidos; no hace falta aplicar varios `.sql`.
@@ -88,8 +88,8 @@ erDiagram
 
 | Tabla | Uso |
 |-------|-----|
-| `budget_templates` | Gasto fijo recurrente (mensual) |
-| `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos |
+| `budget_templates` | Gasto fijo recurrente (mensual); `category_id` opcional → `transaction_categories` |
+| `budget_items` | Instancia del mes (`pending` / `paid` / `skipped`). Solo `pending` con `period_ym <= mes actual` suman a pasivos. Copia `category_id` de la plantilla; al pagar se asigna al egreso |
 | `company_financial_plans` | Estados y proyección por empresa (`workbook_json` v2 + % ahorro). Misma regla de disponible neto que persona. UI: año default = calendario; Comparativa ↔ Detalle sincronizados; carga de egresos (anillo + mes a mes + por categoría) y gasto diario máximo (neto ÷ días; ref. ÷ 30); `+ Año` sin prompt |
 | `person_financial_plans` | Proyección personal (`workbook_json` v2 + % ahorro). Disponible neto = balance − ahorro (meta % solo sobre saldo positivo). UI: año default = calendario; promedio mensual = neto ÷ 12; gasto diario = neto del mes ÷ días; carga = egresos + ahorro + disponible neto (y por categoría en ficha) |
 | `financial_goals` | Metas personalizadas (nombre, meta, juntado, fechas, moneda). Milestones NO son filas: MS01/MS03 usan `settings`; MS02 lee `liabilities` de personas |
@@ -159,14 +159,14 @@ Servicios de app: `BudgetService`, `FinancialPlanService`, `PersonFinancialPlanS
 
 ```
 databases/
-└── patriumhub.sql                 # único SQL de instalación (0.8.7)
+└── patriumhub.sql                 # único SQL de instalación (0.8.8)
 ```
 
 Instalación nueva: importar ese archivo.  
-BD ya en **0.8.6** o anterior con tablas al día: solo alinear el número si hace falta:
+BD ya en **0.8.7** o anterior con tablas al día: solo alinear el número si hace falta:
 
 ```sql
-UPDATE settings SET setting_value = '0.8.7', updated_at = CURRENT_TIMESTAMP
+UPDATE settings SET setting_value = '0.8.8', updated_at = CURRENT_TIMESTAMP
 WHERE setting_key = 'schema.version';
 ```
 

@@ -1,15 +1,15 @@
-# 08 — Estado actual vs objetivo
+﻿# 08 — Estado actual vs objetivo
 
 ## Resumen ejecutivo
 
 PatriumHub está **operativo** (MVP Fases 0–5 + módulos post-MVP).  
-Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/phpMyAdmin, con integraciones WC/MP desde pantallas.
+Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.8**) en Apache/phpMyAdmin, con integraciones WC/MP desde pantallas.
 
 | Tema | Hoy | Siguiente |
 |------|-----|-----------|
 | Código app | MVP + presupuestos, proyecciones, objetivos, clientes, cuentas/activos compartidos, métricas | Uso diario + pulido |
-| BD | Schema **0.8.7** instalable en un solo SQL | Backups periódicos |
-| Docs | Arquitectura + Guía de uso v2.6 | Mantener vivo |
+| BD | Schema **0.8.8** instalable en un solo SQL | Backups periódicos |
+| Docs | Arquitectura + Guía de uso v2.7 | Mantener vivo |
 | Deploy | Carpeta `/patrium`, rutas `index.php?r=/...` | HTTPS en producción |
 | Mercado Pago | Multi-cuenta desde UI → Cuentas | Mantener sync estable |
 | WooCommerce | Sync stock/ventas desde Integraciones | Tienda(s) productivas |
@@ -23,7 +23,7 @@ Stack: app PHP monolítica + BD MySQL (`patriumhub.sql` **0.8.7**) en Apache/php
 ```mermaid
 flowchart LR
   App[PatriumHub PHP]
-  DB[(patriumhub 0.8.7)]
+  DB[(patriumhub 0.8.8)]
   UIInt[Integraciones WC/MP]
   Cron[cron sync + snapshots]
   App --> DB
@@ -42,8 +42,9 @@ Además de Fases 0–5:
 - Métricas y gráficos en listados de patrimonio; Chart.js self-hosted.
 - Cuentas y activos compartidos entre personas (`account_owners` / `asset_owners`).
 - Usuarios con permisos por entidad en Configuración (viewer solo lectura).
-- Movimientos editables con recálculo de saldos; borrado de cuentas en saldo 0 / propiedades.
-- Nav: Proyecciones → Presupuestos → Gastos → Movimientos → Patrimonio (ámbar al final); tema claro/oscuro (`patrium-theme`); botón volver arriba en el layout.
+- Movimientos editables y **eliminables** (`POST /movimientos/{id}/eliminar`) con recálculo de saldos; borrado de cuentas en saldo 0 / propiedades.
+- Nav: Proyecciones → Presupuestos → Gastos → Movimientos → Patrimonio (ámbar al final); tema claro/oscuro (`patrium-theme`); charts se redibujan al cambiar tema; botón volver arriba en el layout.
+- Acciones de tablas con **iconos** (`btn-icon`): Pagar/Cobrar en amarillo (`warn`), Eliminar en rojo (`danger`).
 - Vista **Gastos** (`/gastos`): filtro `entity_id` = todas / `people` / `companies` / id; KPIs real+presupuesto+proyección.
 - Menú móvil (hamburger), ocultar cifras, exports CSV, snapshots por entidad.
 

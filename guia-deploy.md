@@ -1,4 +1,4 @@
-# 11 — Guía de deploy
+﻿# 11 — Guía de deploy
 
 URL: `http://192.168.100.50/patrium`
 
@@ -26,7 +26,7 @@ Prueba: `http://192.168.100.50/patrium/ok.php` → **PatriumHub OK**
 
 ## 2. SQL
 
-phpMyAdmin → importar **solo** `databases/patriumhub.sql` (schema 0.8.7 + seed admin).  
+phpMyAdmin → importar **solo** `databases/patriumhub.sql` (schema 0.8.8 + seed admin).  
 No hace falta aplicar patches sueltos.  
 Si la BD ya existía en 0.7.x: `scripts/migrate_v08.php?key=patrium-migrate-v08`.
 
