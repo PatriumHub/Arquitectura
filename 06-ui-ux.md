@@ -43,8 +43,9 @@ Barra superior (desktop) / panel hamburger (móvil):
 6. **Gastos** — análisis de egresos (real + presupuesto + proyección; `/gastos`)  
 7. **Movimientos**  
 8. **Patrimonio** ▾ — Personas, Empresas, Participaciones, Cuentas, Activos varios, Propiedades, Cobrables, Pasivos, Inventario (último; summary con accent ámbar)  
+8b. **Reporte** — link en el `userbox`, a la izquierda del nombre de usuario (`/reportes/patrimonial`)  
 9. **Perfil** ▾ — Configuración (perfil / usuarios / sistema), Integraciones, Salir  
-10. Toggle **Ocultar cifras**
+10. Toggle **Ocultar cifras** — botón-ícono (ojo abierto = visibles, tachado = ocultas); vive junto al toggle de tema dentro de `.topbar-tools`, que es lo que se reordena en la barra según breakpoint
 11. Toggle **sol/luna** (tema claro/oscuro, por navegador)
 12. Botón **volver arriba** (esquina inferior derecha, aparece al scrollear)
 
@@ -176,6 +177,31 @@ Pagar (`BudgetService::payItem()`) inserta un `transactions` con `type = 'expens
 Editar una plantilla ejecuta `BudgetService::syncPendingItems()`: reaplica monto, nombre, moneda, `due_date`, entidad, categoría y cuenta sugerida sobre los ítems `pending` cuyo `period_ym >= date('Y-m')`. Los `paid` / `skipped` no se tocan, ni los pendientes de meses pasados.
 
 Además, `ensurePeriod()` llama a `syncPendingItemsForPeriod()`, que ignora los períodos anteriores al mes actual: los pendientes se realinean con su plantilla activa en cada visita, así el total del período coincide con Presupuestos por grupos. Los meses pasados quedan congelados (un pendiente atrasado es la deuda tal como se facturó). No hay override de monto por ítem: `budget_items.amount` solo se escribe al generar el ítem o en estos syncs. En el listado del mes la columna Importe muestra `paid_amount` cuando el ítem está pagado (que es lo que suman las tarjetas), con el plan original como subtítulo si difiere.
+
+### Reporte patrimonial mensual
+`/reportes/patrimonial` (`ReportController::patrimonial`) → `PatrimonyReportService::build($periodYm, $scope, $entityId, $currency)`. Filtros: mes, alcance (`all` / `people` / `companies` / id, misma convención que `/gastos`) y moneda.
+
+**No usa `net_worth_snapshots`.** `figures()` arma activo y pasivo desde las tablas de origen y **cada total es la suma de sus líneas**, así el reporte cuadra consigo mismo por construcción y se puede emitir cualquier mes, incluso anterior a la primera captura. Los meses de comparación (anterior y año anterior) se recalculan con la misma función, igual que el desglose por entidad.
+
+El servicio no escribe nada: por eso repite consultas propias de flujo, categorías y presupuesto en vez de reusar `ExpenseAnalysisService::build()`, que llama a `ensurePeriod()` y generaría ítems retroactivos al abrir un mes viejo.
+
+Composición y desglose en una sola tabla: fila de clase (total + % del activo) y debajo su detalle con sangría (`.row-group` / `.row-child` / `td.indent`). Se emiten **todas** las clases aunque valgan cero.
+
+El **corte** (`cutoffDate()` / `cutoffTs()`) es el último día del mes, o el instante actual si el mes está en curso, y lo comparte todo el reporte: saldos, cobrables, flujo y categorías. Nada con fecha posterior entra, aunque ya esté cargado.
+
+En alcance `all` se descuenta un **neteo interno** de los dos lados (cobrables cuyo `debtor_entity_id` es otra entidad activa del grupo), y a diferencia de `PatrimonioService` se muestra como fila explícita en cada tabla en vez de como ajuste oculto.
+
+Los cobrables entran solo si son **exigibles al corte** (`due_date <= corte`, o sin vencimiento), mismo criterio que los presupuestos pendientes: una cuota de un mes posterior no suma al activo del mes del reporte.
+
+Las participaciones se resuelven con `PatrimonioService::participationValues()` y solo se detallan en alcance `people` / `entity`: en el consolidado sumarlas además del patrimonio de la empresa lo contaría dos veces.
+
+El resto del detalle replica las reglas de `PatrimonioService` (empresa al 100 %, persona por `account_owners` / `asset_owners`, y el caso legacy sin filas de titularidad). Las cuentas se valúan al **saldo al corte**, reconstruido como `accounts.balance` menos el efecto de los movimientos con `occurred_at >= corte`, replicando los signos de `TransactionController::applyBalanceEffects()` (incluido `adjustment_direction`, que sale de `metadata_json`). No se usa `account_balances`: registra cuándo se capturó el saldo, no a qué fecha corresponde, así que arrastraría los movimientos cargados con fecha futura. Activos, propiedades, inventario, participaciones y deudas no tienen histórico por línea y van al valor vigente, aclarado en el propio reporte. Los presupuestos pendientes sí son los del período (`period_ym <= mes`). Como `PDO::ATTR_EMULATE_PREPARES` está en `false`, cada rama corre como consulta separada con su propio prefijo de placeholders en vez de un `UNION` con nombres repetidos.
+
+**Limitación conocida:** un mes pasado no es del todo reproducible, porque las clases sin histórico entran a valor de hoy. Fijarlas exige versionar `assets`, `properties`, `inventories` y `liabilities` como ya se hace con las cuentas vía movimientos; es un cambio de esquema pendiente, no un bug del reporte.
+
+El ranking de egresos por categoría es un Chart.js de barras horizontales en % que se repinta con `patrium:theme`.
+
+Salida a PDF por **impresión del navegador**: `@media print` en `app.css` oculta nav y filtros (`.no-print`), fija A4 y evita cortes dentro de `.report-section`. No hay dependencias de PDF en el server.
 
 ### Dinero prestado
 Alta como cobrable → marcar pago (acredita en cuenta) hasta cancelar.  
