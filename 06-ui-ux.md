@@ -4,7 +4,7 @@
 
 PatriumHub es una sola app. La UI prioriza **comprensión patrimonial** sobre densidad de un ERP.
 
-Tema visual: claro por defecto; **modo oscuro** con `html[data-theme]` + `localStorage` (`patrium-theme`), mismo patrón que el sitio. Acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras). Toggle sol/luna siempre visible en la barra (desktop: a la derecha del nav; móvil: entre brand y hamburger). Al cambiar tema se dispara `patrium:theme` y los Chart.js de listados/gastos/gastos agrupados se **vuelven a pintar** (ticks/leyendas legibles en ambos modos).
+Tema visual: claro por defecto; **modo oscuro** con `html[data-theme]` + `localStorage` (`patrium-theme`), mismo patrón que el sitio. Acento verde, tipografía **DM Sans** + **IBM Plex Mono** (cifras). Toggle sol/luna siempre visible en la barra (desktop: a la derecha del nav; móvil: entre brand y hamburger). Al cambiar tema se dispara `patrium:theme` y los Chart.js de listados/gastos/Presupuestos por grupos se **vuelven a pintar** (ticks/leyendas legibles en ambos modos).
 
 Acciones de filas en tablas: helpers `ui_icon` / `icon_action_link` / `icon_action_button` (clase `.btn-icon`). Convención de color: **Eliminar** = rojo (`danger`); **Pagar / Cobrar** = amarillo (`warn`). Las celdas de acción usan `td.actions` como `table-cell` (no `display:flex` del toolbar `.page-head .actions`).
 
@@ -169,7 +169,13 @@ Perfil → Integraciones → proveedor → entidad + credenciales → probar →
 ### Presupuesto del mes
 Presupuestos → asegurar período → pagar / omitir / revertir.  
 Solo los `pending` con `period_ym` ≤ mes actual suman a pasivos. Navegar un mes futuro no baja el neto.  
-**Gastos agrupados:** por entidad, con composición (% por nombre) y ranking de mayor a menor; los charts reaccionan al toggle de tema.
+**Presupuestos por grupos:** por entidad, con composición (% por nombre) y ranking de mayor a menor; los charts reaccionan al toggle de tema. Total del grupo **por moneda** (no se suman ARS + USD); el gráfico y los % usan la moneda dominante. El alta de gastos vive solo acá (`/presupuestos/plantillas/nueva`): la vista del mes no crea nada, porque no existe el ítem suelto sin plantilla.
+
+Pagar (`BudgetService::payItem()`) inserta un `transactions` con `type = 'expense'` y guarda en `metadata_json` el `budget_item_id`, el `budget_template_id` y el `period_ym`. De ahí sale el corte **presupuesto vs libre** de `/gastos` (`JSON_EXTRACT(metadata_json, '$.budget_item_id') IS NOT NULL`) y el revertir. Pagar en 0 (`payItemZero()`) no crea movimiento.
+
+Editar una plantilla ejecuta `BudgetService::syncPendingItems()`: reaplica monto, nombre, moneda, `due_date`, entidad, categoría y cuenta sugerida sobre los ítems `pending` cuyo `period_ym >= date('Y-m')`. Los `paid` / `skipped` no se tocan, ni los pendientes de meses pasados.
+
+Además, `ensurePeriod()` llama a `syncPendingItemsForPeriod()`, que ignora los períodos anteriores al mes actual: los pendientes se realinean con su plantilla activa en cada visita, así el total del período coincide con Presupuestos por grupos. Los meses pasados quedan congelados (un pendiente atrasado es la deuda tal como se facturó). No hay override de monto por ítem: `budget_items.amount` solo se escribe al generar el ítem o en estos syncs. En el listado del mes la columna Importe muestra `paid_amount` cuando el ítem está pagado (que es lo que suman las tarjetas), con el plan original como subtítulo si difiere.
 
 ### Dinero prestado
 Alta como cobrable → marcar pago (acredita en cuenta) hasta cancelar.  
