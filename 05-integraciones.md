@@ -227,7 +227,7 @@ Mismo patrón: **pantalla de conexión + credentials cifradas + sync_runs**.
 |-------|-----|
 | `DB_HOST` / `DB_USER` / `DB_PASS` / `DB_NAME` | Conexión MySQL |
 | `APP_URL` | Links absolutos |
-| `SESSION_*` | Cookies / seguridad sesión |
+| `SESSION_*` | Cookies / seguridad sesión. `SESSION_LIFETIME` y `SESSION_IDLE` (segundos, default `86400` = 24 h); ventana deslizante en cada visita. `SESSION_SECURE` fuerza cookie HTTPS. |
 | `storage/app.key` | Clave de cifrado (generada en Configuración) |
 
 **Nunca en `.env`:** Access Token MP, Public Key MP, Consumer Key/Secret WC.

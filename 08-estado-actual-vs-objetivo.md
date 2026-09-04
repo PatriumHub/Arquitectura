@@ -45,7 +45,7 @@ Además de Fases 0–5:
 - Movimientos editables y **eliminables** (`POST /movimientos/{id}/eliminar`) con recálculo de saldos; borrado de cuentas en saldo 0 / propiedades.
 - Nav: Proyecciones → Presupuestos → Gastos → Movimientos → Patrimonio (ámbar al final); tema claro/oscuro (`patrium-theme`); charts se redibujan al cambiar tema; botón volver arriba en el layout.
 - Acciones de tablas con **iconos** (`btn-icon`): Pagar/Cobrar en amarillo (`warn`), Eliminar en rojo (`danger`).
-- Vista **Gastos** (`/gastos`): filtro `entity_id` = todas / `people` / `companies` / id; KPIs real+presupuesto+proyección.
+- Vista **Gastos** (`/gastos`): filtro `entity_id` = todas / `people` / `companies` / id; KPIs en bloques (incluye **Queda** = ingresos − egresos); sin alertas de insight.
 - Menú móvil (hamburger), ocultar cifras, exports CSV, snapshots por entidad.
 
 ## Prioridad restante

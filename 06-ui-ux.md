@@ -129,7 +129,7 @@ Filtros: `preset` (30d/month/90d/ytd/year/custom), `from`/`to`, `currency`, y `e
 - `people` / `companies` → todas las personas o todas las empresas (`ExpenseAnalysisService` resuelve IDs vía `Catalog::entities`)
 - id numérico → una entidad (`scope=entity`)
 
-KPIs y gráficos cruzan:
+KPIs agrupados en bloques visuales (`.kpi-block` + título): gasto del período · ingresos/resultado con **Queda** (`available_est` = ingresos − egresos) · presupuesto · proyección · perfil. **No hay alertas de insight** en la vista: `ExpenseAnalysisService` ya no arma mensajes de concentración / pendiente / variación. Gráficos cruzan:
 1. **Real** — `transactions` tipo `expense` / `payment` (/ `egreso`)
 2. **Presupuesto** — totales de `budget_items` del mes de cierre del rango (mismo filtro de entidades)
 3. **Proyección** — egreso anual de planilla prorrateado al largo del período (`ProjectionsAggregateService` con scope people/companies/all, o planilla de la entidad)

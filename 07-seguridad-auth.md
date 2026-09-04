@@ -12,6 +12,7 @@ flowchart TB
 ```
 
 - Autenticación por **sesión PHP** contra `users`.
+- Cookie de sesión e idle timeout: **24 h** por defecto (`SESSION_LIFETIME` / `SESSION_IDLE` = `86400`). Cada visita autenticada renueva `_last_activity` y reenvía la cookie (ventana deslizante): si el usuario vuelve antes de las 24 h, sigue adentro; si pasa ese lapso sin entrar, al próximo request se cierra. `session.gc_maxlifetime` se alinea con el lifetime para que el GC del server no borre el archivo antes.
 - MFA: previsto a futuro, no bloqueante del MVP.
 - Roles mínimos: `admin` (todo) y, si hace falta, `viewer` (solo lectura).
 - Permisos por entidad: roadmap (compartir acceso familiar); MVP asume un operador principal.
